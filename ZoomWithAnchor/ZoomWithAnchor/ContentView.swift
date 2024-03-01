@@ -9,16 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
 	
+	private static let noZoom: Double = 1
 	private let minZoom: Double = 0.5
 	private let maxZoom: Double = 2
 	
+	@State var zoom: Double = noZoom
+
 	var body: some View {
-		ScrollingViewPortView()
+		Zoomer(zoom: $zoom, minZoom: minZoom, maxZoom: maxZoom)
+			.frame(width: 200)
+		ScrollingViewPort()
 	}
 }
 
-struct ScrollingViewPortView: View {
-	private let viewPortVisibleWidth: CGFloat = 100
+struct ScrollingViewPort: View {
+	private let viewPortVisibleWidth: CGFloat = 150
 	private let viewPortHeight: CGFloat = 100
 	private let rulerWidth: CGFloat = 400
 	private let rulerHeight: CGFloat = 50
@@ -33,12 +38,10 @@ struct ScrollingViewPortView: View {
 			viewPort(visibleWidth: viewPortVisibleWidth, totalWidth: viewPortVisibleWidth + 2 * rulerWidth, height: viewPortHeight)
 		}
 		.frame(width: 2 * max(viewPortVisibleWidth, rulerWidth))
-		
-		Slider(
-			value: $scrollOffset,
-			in: 0...rulerWidth
-		)
-		.frame(width: rulerWidth)
+
+		Scroller(scrollOffset: $scrollOffset, maxScrollOffset: rulerWidth)
+			.frame(width: 400)
+
 	}
 	
 	private var rulerOffset: CGFloat {
@@ -50,7 +53,7 @@ struct ScrollingViewPortView: View {
 		HStack(spacing: 0) {
 			viewPortSegment(width: totalWidth / 2 - visibleWidth / 2, height: height, opacity: 0.8)
 			viewPortSegment(width: visibleWidth, height: height, opacity: 0.0)
-				.border(.gray)
+				.border(Color(white: 0.8))
 			
 			viewPortSegment(width: totalWidth / 2 - visibleWidth / 2 , height: height, opacity: 0.8)
 		}
@@ -62,7 +65,7 @@ struct ScrollingViewPortView: View {
 			.frame(width: width, height: height)
 			.background(
 				Rectangle()
-					.fill(BackgroundStyle())
+					.fill(.background)
 					.opacity(opacity)
 			)
 	}
