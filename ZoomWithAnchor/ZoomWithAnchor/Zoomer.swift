@@ -16,18 +16,17 @@ struct Zoomer: View {
 	let maxZoom: Double
 
 	var body: some View {
-		VStack {
-			Slider(
-				value: $zoom,
-				in: minZoom...maxZoom
-			){
-				Text("Zoom level")
-			} minimumValueLabel: {
-				Text(minZoom, format: .number.precision(.fractionLength(1)))
-			} maximumValueLabel: {
-				Text(maxZoom, format: .number.precision(.fractionLength(1)))
-			}
+		Slider(
+			value: $zoom,
+			in: minZoom...maxZoom
+		){
+			Text("Zoom")
+		} minimumValueLabel: {
+			Text(minZoom, format: .number.precision(.fractionLength(1)))
+		} maximumValueLabel: {
+			Text(maxZoom, format: .number.precision(.fractionLength(1)))
 		}
+		.help("Zoom level")
 	}
 }
 #Preview {

@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+struct Settings {
+	
+}
 struct ContentView: View {
 	
 	private static let noZoom: Double = 1
