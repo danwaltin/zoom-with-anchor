@@ -15,13 +15,13 @@ protocol ZoomSettings {
 struct Settings: ZoomSettings {
 	let viewPortVisibleWidth: CGFloat = 200
 	let viewPortHeight: CGFloat = 100
-	let rulerHeight: CGFloat = 50
-	let rulerUnzoomedWidth: CGFloat = 300
+	let contentHeight: CGFloat = 50
+	let contentUnzoomedWidth: CGFloat = 300
 	let minZoom: Double = 0.5
 	let maxZoom: Double = 2
 	
-	var maxRulerWidth: CGFloat {
-		rulerUnzoomedWidth * maxZoom
+	var maxContentWidth: CGFloat {
+		contentUnzoomedWidth * maxZoom
 	}
 }
 
@@ -39,18 +39,22 @@ struct ContentView: View {
 			settings: settings)
 		.frame(width: 200)
 		ScrollingViewPort(
-			rulerWidth: settings.rulerUnzoomedWidth,
+			contentWidth: zoomedWidth,
 			scrollOffset: scrollOffset,
 			settings: settings)
 		Scroller(
 			scrollOffset: $scrollOffset,
-			maxScrollOffset: settings.rulerUnzoomedWidth - settings.viewPortVisibleWidth)
+			maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
 		.frame(width: 400)
+	}
+	
+	private var zoomedWidth: CGFloat {
+		settings.contentUnzoomedWidth * zoom
 	}
 }
 
 struct ScrollingViewPort: View {
-	let rulerWidth: CGFloat
+	let contentWidth: CGFloat
 	let scrollOffset: CGFloat
 	let settings: Settings
 	
@@ -59,24 +63,24 @@ struct ScrollingViewPort: View {
 			Ruler(
 				numberOfSegments: 10,
 				color: .green,
-				width: rulerWidth,
-				height: settings.rulerHeight)
+				width: contentWidth,
+				height: settings.contentHeight)
 			.border(.gray)
 			.offset(.init(width: rulerOffset, height: 0))
 			viewPort()
 		}
-		.frame(width: 2 * max(settings.viewPortVisibleWidth, rulerWidth))
+		.frame(width: 2 * max(settings.viewPortVisibleWidth, contentWidth))
 	}
 	
 	private var rulerOffset: CGFloat {
-		rulerWidth / 2 - settings.viewPortVisibleWidth / 2 - scrollOffset
+		contentWidth / 2 - settings.viewPortVisibleWidth / 2 - scrollOffset
 	}
 	
 	@ViewBuilder
 	private func viewPort() -> some View {
 		HStack(spacing: 0) {
 			viewPortSegment(
-				width: settings.maxRulerWidth - settings.viewPortVisibleWidth,
+				width: settings.maxContentWidth - settings.viewPortVisibleWidth,
 				height: settings.viewPortHeight,
 				opacity: 0.6)
 			
@@ -87,7 +91,7 @@ struct ScrollingViewPort: View {
 				.border(Color(white: 0.8))
 			
 			viewPortSegment(
-				width: settings.maxRulerWidth - settings.viewPortVisibleWidth,
+				width: settings.maxContentWidth - settings.viewPortVisibleWidth,
 				height: settings.viewPortHeight,
 				opacity: 0.6)
 		}

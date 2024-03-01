@@ -15,7 +15,7 @@ struct Scroller: View {
 		VStack {
 			Slider(
 				value: $scrollOffset,
-				in: 0...maxScrollOffset
+				in: 0...max(0, maxScrollOffset)
 			){
 				Text("Scroll")
 			}
