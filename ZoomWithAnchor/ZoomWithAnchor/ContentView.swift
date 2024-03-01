@@ -8,23 +8,44 @@
 import SwiftUI
 
 struct ContentView: View {
+	private let viewPortVisibleWidth: CGFloat = 100
+	private let viewPortHeight: CGFloat = 100
+	private let rulerWidth: CGFloat = 400
+	private let rulerHeight: CGFloat = 50
+	
+	private let minZoom: Double = 0.5
+	private let maxZoom: Double = 2
+	
 	var body: some View {
 		ZStack {
-			viewPort()
+			Ruler(numberOfSegments: 10, color: .green, width: rulerWidth, height: rulerHeight)
 				.border(.gray)
-			Ruler(numberOfSegments: 10, color: .green, width: 400, height: 50)
+				.offset(.init(width: rulerWidth / 2 - viewPortVisibleWidth / 2, height: 0))
+			viewPort(visibleWidth: viewPortVisibleWidth, totalWidth: viewPortVisibleWidth + 2 * rulerWidth, height: viewPortHeight)
+		}
+		.frame(width: 2 * max(viewPortVisibleWidth, rulerWidth))
+	}
+	
+	@ViewBuilder
+	private func viewPort(visibleWidth: CGFloat, totalWidth: CGFloat, height: CGFloat) -> some View {
+		HStack(spacing: 0) {
+			viewPortSegment(width: totalWidth / 2 - visibleWidth / 2, height: height, opacity: 0.8)
+			viewPortSegment(width: visibleWidth, height: height, opacity: 0.0)
 				.border(.gray)
+			
+			viewPortSegment(width: totalWidth / 2 - visibleWidth / 2, height: height, opacity: 0.8)
 		}
 	}
 	
 	@ViewBuilder
-	private func viewPort() -> some View {
+	private func viewPortSegment(width: CGFloat, height: CGFloat, opacity: Double) -> some View {
 		Path()
-		.frame(width: 100, height: 100)
-		.background(
-			Rectangle()
-				.fill(BackgroundStyle())
-		)
+			.frame(width: width, height: height)
+			.background(
+				Rectangle()
+					.fill(BackgroundStyle())
+					.opacity(opacity)
+			)
 	}
 }
 
