@@ -103,7 +103,7 @@ struct ScrollingViewPort: View {
 	@ViewBuilder
 	private func viewPortSegment(width: CGFloat, height: CGFloat, opacity: Double) -> some View {
 		Path()
-			.frame(width: width, height: height)
+			.frame(width: max(0, width), height: height)
 			.background(
 				Rectangle()
 					.fill(.background)

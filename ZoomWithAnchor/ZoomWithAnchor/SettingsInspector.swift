@@ -12,28 +12,23 @@ struct SettingsInspector: View {
 	
 	var body: some View {
 		VStack {
-			HStack {
-				Text("View port width")
-					.font(.headline)
-				text(settings.viewPortVisibleWidth)
-				Spacer()
-			}
-			HStack(alignment: .center) {
-				Slider(
-					value: $settings.viewPortVisibleWidth,
-					in: 0...max(settings.minViewPortVisibleWidth, settings.maxViewPortVisibleWidth)
-				) {}
-				minimumValueLabel: {
-					text(settings.minViewPortVisibleWidth)
-				} maximumValueLabel: {
-					text(settings.maxViewPortVisibleWidth)
-				}
-			}
-			
+			slider("View Port Width",
+				   minValue: settings.minViewPortVisibleWidth,
+				   maxValue: settings.maxViewPortVisibleWidth,
+				   currentValue: $settings.viewPortVisibleWidth)
+			Divider()
+			slider("Content Unzoomed Width",
+				   minValue: settings.minContentUnzoomedWidth,
+				   maxValue: settings.maxContentUnzoomedWidth,
+				   currentValue: $settings.contentUnzoomedWidth)
+
 			Spacer()
 			
-			Button("Reset") {
-				settings.resetToDefault()
+			HStack {
+				Spacer()
+				Button("Reset") {
+					settings.resetToDefault()
+				}
 			}
 		}
 		.padding()
@@ -41,8 +36,33 @@ struct SettingsInspector: View {
 	}
 	
 	@ViewBuilder
-	private func text(_ value: CGFloat) -> some View {
-		Text(value, format: .number.precision(.fractionLength(0)))
+	private func slider(_ title: String, minValue: CGFloat, maxValue: CGFloat, currentValue: Binding<CGFloat>) -> some View {
+		HStack {
+			Text(title)
+			numericText(currentValue.wrappedValue)
+			Spacer()
+		}
+		.font(.headline)
+		.foregroundStyle(.gray)
+
+		HStack(alignment: .center) {
+			Slider(
+				value: currentValue,
+				in: minValue...maxValue
+			) {}
+			minimumValueLabel: {
+				numericText(minValue)
+			} maximumValueLabel: {
+				numericText(maxValue)
+			}
+			.controlSize(.small)
+		}
+
+	}
+	
+	@ViewBuilder
+	private func numericText(_ value: CGFloat, decimals: Int = 0) -> some View {
+		Text(value, format: .number.precision(.fractionLength(decimals)))
 	}
 }
 
