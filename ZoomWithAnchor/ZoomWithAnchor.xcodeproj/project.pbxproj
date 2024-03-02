@@ -14,6 +14,8 @@
 		37FD645C2B9112B600A2884F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD645B2B9112B600A2884F /* ContentView.swift */; };
 		37FD645E2B9112BA00A2884F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37FD645D2B9112BA00A2884F /* Assets.xcassets */; };
 		37FD64612B9112BA00A2884F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37FD64602B9112BA00A2884F /* Preview Assets.xcassets */; };
+		37FD64692B9300E200A2884F /* SettingsInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD64682B9300E200A2884F /* SettingsInspector.swift */; };
+		37FD646B2B93023400A2884F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD646A2B93023400A2884F /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		37FD645D2B9112BA00A2884F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37FD64602B9112BA00A2884F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		37FD64622B9112BA00A2884F /* ZoomWithAnchor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZoomWithAnchor.entitlements; sourceTree = "<group>"; };
+		37FD64682B9300E200A2884F /* SettingsInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInspector.swift; sourceTree = "<group>"; };
+		37FD646A2B93023400A2884F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,8 @@
 				3755C0982B925376002D9E04 /* Ruler.swift */,
 				3755C09A2B9266CC002D9E04 /* Scroller.swift */,
 				3755C09C2B926727002D9E04 /* Zoomer.swift */,
+				37FD64682B9300E200A2884F /* SettingsInspector.swift */,
+				37FD646A2B93023400A2884F /* Settings.swift */,
 			);
 			path = ZoomWithAnchor;
 			sourceTree = "<group>";
@@ -152,6 +158,8 @@
 				37FD645A2B9112B600A2884F /* ZoomWithAnchorApp.swift in Sources */,
 				3755C0992B925376002D9E04 /* Ruler.swift in Sources */,
 				3755C09B2B9266CC002D9E04 /* Scroller.swift in Sources */,
+				37FD646B2B93023400A2884F /* Settings.swift in Sources */,
+				37FD64692B9300E200A2884F /* SettingsInspector.swift in Sources */,
 				3755C09D2B926727002D9E04 /* Zoomer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,40 +12,43 @@ protocol ZoomSettings {
 	var maxZoom: Double {get}
 }
 
-struct Settings: ZoomSettings {
-	let viewPortVisibleWidth: CGFloat = 200
-	let viewPortHeight: CGFloat = 100
-	let contentHeight: CGFloat = 50
-	let contentUnzoomedWidth: CGFloat = 300
-	let minZoom: Double = 0.5
-	let maxZoom: Double = 2
-	
-	var maxContentWidth: CGFloat {
-		contentUnzoomedWidth * maxZoom
-	}
-}
-
 struct ContentView: View {
 	
 	private static let noZoom: Double = 1
 	
-	let settings = Settings()
+	@State var settings = Settings()
+	
 	@State var zoom: Double = noZoom
 	@State var scrollOffset: CGFloat = 0
 	
+	@State private var showSettings = true
+	
 	var body: some View {
-		Zoomer(
-			zoom: $zoom,
-			settings: settings)
-		.frame(width: 200)
-		ScrollingViewPort(
-			contentWidth: zoomedWidth,
-			scrollOffset: scrollOffset,
-			settings: settings)
-		Scroller(
-			scrollOffset: $scrollOffset,
-			maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
-		.frame(width: 400)
+		VStack {
+			Zoomer(
+				zoom: $zoom,
+				settings: settings)
+			.frame(width: 200)
+			ScrollingViewPort(
+				contentWidth: zoomedWidth,
+				scrollOffset: scrollOffset,
+				settings: settings)
+			Scroller(
+				scrollOffset: $scrollOffset,
+				maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
+			.frame(width: 400)
+		}
+		.inspector(isPresented: $showSettings) {
+			SettingsInspector(settings: settings)
+		}
+		.toolbar(content: {
+			Spacer()
+			Button {
+				showSettings.toggle()
+			} label: {
+				Image(systemName: "sidebar.trailing")
+			}
+		})
 	}
 	
 	private var zoomedWidth: CGFloat {
@@ -112,6 +115,5 @@ struct ScrollingViewPort: View {
 
 #Preview {
 	ContentView()
-		.padding()
 }
 
