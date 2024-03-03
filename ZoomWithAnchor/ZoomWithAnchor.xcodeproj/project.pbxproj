@@ -17,6 +17,7 @@
 		37FD64692B9300E200A2884F /* SettingsInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD64682B9300E200A2884F /* SettingsInspector.swift */; };
 		37FD646B2B93023400A2884F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD646A2B93023400A2884F /* Settings.swift */; };
 		37FD646D2B930B2900A2884F /* ScrollingViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD646C2B930B2900A2884F /* ScrollingViewPort.swift */; };
+		37FD646F2B94730E00A2884F /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FD646E2B94730E00A2884F /* Anchor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		37FD64682B9300E200A2884F /* SettingsInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInspector.swift; sourceTree = "<group>"; };
 		37FD646A2B93023400A2884F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		37FD646C2B930B2900A2884F /* ScrollingViewPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingViewPort.swift; sourceTree = "<group>"; };
+		37FD646E2B94730E00A2884F /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				37FD64682B9300E200A2884F /* SettingsInspector.swift */,
 				37FD646A2B93023400A2884F /* Settings.swift */,
 				37FD646C2B930B2900A2884F /* ScrollingViewPort.swift */,
+				37FD646E2B94730E00A2884F /* Anchor.swift */,
 			);
 			path = ZoomWithAnchor;
 			sourceTree = "<group>";
@@ -164,6 +167,7 @@
 				37FD646B2B93023400A2884F /* Settings.swift in Sources */,
 				37FD64692B9300E200A2884F /* SettingsInspector.swift in Sources */,
 				3755C09D2B926727002D9E04 /* Zoomer.swift in Sources */,
+				37FD646F2B94730E00A2884F /* Anchor.swift in Sources */,
 				37FD646D2B930B2900A2884F /* ScrollingViewPort.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

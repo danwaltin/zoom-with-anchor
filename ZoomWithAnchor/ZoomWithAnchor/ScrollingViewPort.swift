@@ -32,22 +32,32 @@ struct ScrollingViewPort: View {
 	
 	@ViewBuilder
 	private func viewPort() -> some View {
-		HStack(spacing: 0) {
-			viewPortSegment(
-				width: settings.maxContentWidth - settings.viewPortVisibleWidth,
-				height: settings.viewPortHeight,
-				opacity: 0.6)
-			
-			viewPortSegment(
-				width: settings.viewPortVisibleWidth,
-				height: settings.viewPortHeight,
-				opacity: 0.0)
-				.border(Color(white: 0.8))
-			
-			viewPortSegment(
-				width: settings.maxContentWidth - settings.viewPortVisibleWidth,
-				height: settings.viewPortHeight,
-				opacity: 0.6)
+			ZStack {
+				HStack(spacing: 0) {
+					viewPortSegment(
+						width: settings.maxContentWidth - settings.viewPortVisibleWidth,
+						height: settings.viewPortHeight,
+						opacity: 0.6)
+					
+					viewPortSegment(
+						width: settings.viewPortVisibleWidth,
+						height: settings.viewPortHeight,
+						opacity: 0.0)
+					.border(Color(white: 0.8))
+					
+					viewPortSegment(
+						width: settings.maxContentWidth - settings.viewPortVisibleWidth,
+						height: settings.viewPortHeight,
+						opacity: 0.6)
+				}
+				GeometryReader { g in
+					PlayHeadView(
+						height: settings.viewPortHeight,
+						offsetX: settings.maxContentWidth - settings.viewPortVisibleWidth,
+						offsetY: g.size.height / 2 - settings.viewPortHeight / 2)
+					.border(.red)
+					
+				}
 		}
 	}
 	
