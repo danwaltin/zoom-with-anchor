@@ -17,9 +17,6 @@ struct ContentView: View {
 	private static let noZoom: Double = 1
 	
 	@State var settings = Settings()
-	
-	@State var zoom: Double = noZoom
-	@State var scrollOffset: CGFloat = 0
 	@State var scrollState: ScrollState = .init()
 	
 	@State private var showSettings = true
@@ -27,36 +24,46 @@ struct ContentView: View {
 	var body: some View {
 		VStack {
 			Zoomer(
-				zoom: $zoom,
+				zoom: $scrollState.zoom,
 				settings: settings)
 			.frame(width: 200)
 			ScrollingViewPort(
 				contentWidth: zoomedWidth,
-				scrollOffset: scrollOffset,
+				scrollOffset: scrollState.scrollOffset,
 				settings: settings,
+				relativeAnchorPositionInContent: calculateRelativeAnchorPositionInContent(),
 				anchorPositionInViewPort: $scrollState.anchorPositionInViewPort)
 			Scroller(
-				scrollOffset: $scrollOffset,
+				scrollOffset: $scrollState.scrollOffset,
 				maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
 			.frame(width: 400)
 		}
 		.onChange(of: scrollState.anchorPositionInViewPort) {
 			updateAnchorPosition()
 		}
-		.onChange(of: zoom) {
+		.onChange(of: scrollState.zoom) {
 			updateAnchorPosition()
 		}
-		.onChange(of: scrollOffset) {
+		.onChange(of: scrollState.scrollOffset) {
 			updateAnchorPosition()
 		}
 		.inspector(isPresented: $showSettings) {
 			GeometryReader { g in
 				VStack {
 					SettingsInspector(settings: settings)
-						.frame(width: g.size.width, height: g.size.height / 2)
+						.frame(width: g.size.width)
 					Divider()
 					StateInspector(state: scrollState)
-						.frame(width: g.size.width, height: g.size.height / 2)
+						.frame(width: g.size.width)
+					Spacer()
+					Divider()
+					HStack {
+						Spacer()
+						Button("Reset") {
+							settings.resetToDefault()
+						}
+					}
+					.padding([.bottom, .trailing])
 				}
 			}
 		}
@@ -72,11 +79,15 @@ struct ContentView: View {
 	
 	private func updateAnchorPosition() {
 		scrollState.relativeAnchorPositionInViewPort = scrollState.anchorPositionInViewPort / settings.viewPortVisibleWidth
-		scrollState.relativeAnchorPositionInContent = (scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
+		scrollState.relativeAnchorPositionInContent = calculateRelativeAnchorPositionInContent()
+	}
+
+	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
+		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
 	}
 
 	private var zoomedWidth: CGFloat {
-		settings.contentUnzoomedWidth * zoom
+		settings.contentUnzoomedWidth * scrollState.zoom
 	}
 }
 

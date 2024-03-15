@@ -16,8 +16,8 @@ struct StateInspector: View {
 				stateInformation("Anchor in view port:", state.anchorPositionInViewPort)
 				stateInformation("Relative anchor in view port:", state.relativeAnchorPositionInViewPort)
 				stateInformation("Relative anchor in content:", state.relativeAnchorPositionInContent)
-
-				Spacer()
+				stateInformation("Zoom:", state.zoom)
+				stateInformation("Scroll offset:", state.scrollOffset)
 			}
 			.padding()
 			Spacer()
@@ -31,7 +31,7 @@ struct StateInspector: View {
 				.font(.caption)
 			Text("\(value)")
 		}
-		.padding(.bottom)
+		.padding(.bottom, 5)
 	}
 }
 

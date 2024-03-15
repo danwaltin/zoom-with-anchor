@@ -11,4 +11,6 @@ struct ScrollState {
 	var anchorPositionInViewPort: CGFloat = 0
 	var relativeAnchorPositionInViewPort: CGFloat = 0
 	var relativeAnchorPositionInContent: CGFloat = 0
+	var zoom: Double = 1
+	var scrollOffset: CGFloat = 0
 }

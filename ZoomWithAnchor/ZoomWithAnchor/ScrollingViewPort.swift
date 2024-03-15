@@ -11,7 +11,8 @@ struct ScrollingViewPort: View {
 	let contentWidth: CGFloat
 	let scrollOffset: CGFloat
 	let settings: Settings
-	
+
+	let relativeAnchorPositionInContent: CGFloat
 	@Binding var anchorPositionInViewPort: CGFloat
 	
 	var body: some View {
@@ -93,5 +94,9 @@ struct ScrollingViewPort: View {
 }
 
 #Preview {
-	ScrollingViewPort(contentWidth: 200, scrollOffset: 0, settings: Settings(), anchorPositionInViewPort: .constant(0))
+	ScrollingViewPort(contentWidth: 200,
+					  scrollOffset: 0,
+					  settings: Settings(),
+					  relativeAnchorPositionInContent: 0,
+					  anchorPositionInViewPort: .constant(0))
 }

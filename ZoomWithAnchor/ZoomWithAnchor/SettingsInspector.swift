@@ -21,15 +21,6 @@ struct SettingsInspector: View {
 				   minValue: settings.minContentUnzoomedWidth,
 				   maxValue: settings.maxContentUnzoomedWidth,
 				   currentValue: $settings.contentUnzoomedWidth)
-
-			Spacer()
-			
-			HStack {
-				Spacer()
-				Button("Reset") {
-					settings.resetToDefault()
-				}
-			}
 		}
 		.padding()
 
