@@ -41,7 +41,13 @@ struct ContentView: View {
 		.onChange(of: scrollState.anchorPositionInViewPort) {
 			updateAnchorPosition()
 		}
-		.onChange(of: scrollState.zoom) {
+		.onChange(of: scrollState.zoom) { oldZoom, newZoom in
+			let oldContentWidth = settings.contentUnzoomedWidth * oldZoom
+			let relativeContentAnchor = (scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / oldContentWidth
+			
+			let newContentWidth = settings.contentUnzoomedWidth * newZoom
+			let newScrollOffset = relativeContentAnchor * newContentWidth - scrollState.anchorPositionInViewPort
+			scrollState.scrollOffset = newScrollOffset
 			updateAnchorPosition()
 		}
 		.onChange(of: scrollState.scrollOffset) {

@@ -13,11 +13,11 @@ struct StateInspector: View {
 	var body: some View {
 		HStack {
 			VStack(alignment: .leading) {
-				stateInformation("Anchor in view port:", state.anchorPositionInViewPort)
-				stateInformation("Relative anchor in view port:", state.relativeAnchorPositionInViewPort)
-				stateInformation("Relative anchor in content:", state.relativeAnchorPositionInContent)
-				stateInformation("Zoom:", state.zoom)
-				stateInformation("Scroll offset:", state.scrollOffset)
+				stateInformation("Anchor in view port", state.anchorPositionInViewPort)
+				stateInformation("Relative anchor in view port", state.relativeAnchorPositionInViewPort)
+				stateInformation("Relative anchor in content", state.relativeAnchorPositionInContent)
+				stateInformation("Zoom", state.zoom)
+				stateInformation("Scroll offset", state.scrollOffset)
 			}
 			.padding()
 			Spacer()
