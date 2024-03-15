@@ -10,7 +10,7 @@ import SwiftUI
 fileprivate let handleHeight: CGFloat = 15
 fileprivate let handleStartY: CGFloat = 0
 
-fileprivate struct PlayHeadHandle : Shape {
+fileprivate struct AnchorHeadHandle : Shape {
 	func path(in rect: CGRect) -> Path {
 		Path { path in
 			path.move(to: CGPoint(x: rect.minX, y: handleStartY))
@@ -23,7 +23,7 @@ fileprivate struct PlayHeadHandle : Shape {
 	}
 }
 
-fileprivate struct PlayHeadLine : Shape {
+fileprivate struct AnchorLine : Shape {
 	func path(in rect: CGRect) -> Path {
 		Path { path in
 			path.move(to: CGPoint(x: rect.minX + rect.width / 2, y: handleStartY + handleHeight))
@@ -32,7 +32,7 @@ fileprivate struct PlayHeadLine : Shape {
 	}
 }
 
-fileprivate struct PlayHead : View {
+fileprivate struct AnchorHead : View {
 	let height: CGFloat
 	let x: CGFloat
 	let y: CGFloat
@@ -44,11 +44,11 @@ fileprivate struct PlayHead : View {
 	var body: some View {
 
 		ZStack {
-			PlayHeadHandle()
+			AnchorHeadHandle()
 				.fill(color.opacity(0.3))
-			PlayHeadHandle()
+			AnchorHeadHandle()
 				.stroke(color, lineWidth: lineWidth)
-			PlayHeadLine()
+			AnchorLine()
 				.stroke(color, lineWidth: lineWidth)
 		}
 		.onHover {
@@ -77,17 +77,17 @@ fileprivate struct PlayHead : View {
 	}
 }
 
-struct PlayHeadView: View {
+struct Anchor: View {
 	let height: CGFloat
-	let offsetX: CGFloat
-	let offsetY: CGFloat
+	@Binding var offsetX: CGFloat
+	let offsetY: CGFloat = 0
 
 	@State var isDragging = false
 	@State var draggedToX: CGFloat = 0
 	
 	var body: some View {
 		ZStack {
-			PlayHead(height: height, x: offsetX, y: offsetY, dragged: false)
+			AnchorHead(height: height, x: offsetX, y: offsetY, dragged: false)
 				.gesture(
 					DragGesture()
 						.onChanged { playHeadDragging($0) }
@@ -95,7 +95,7 @@ struct PlayHeadView: View {
 				)
 			
 			if isDragging {
-				PlayHead(height: height, x: draggedToX, y: offsetY, dragged: true)
+				AnchorHead(height: height, x: draggedToX, y: offsetY, dragged: true)
 			}
 		}
 
@@ -109,16 +109,16 @@ struct PlayHeadView: View {
 	private func playHeadDragEndend(_ gesture: DragGesture.Value) {
 		isDragging = false
 		let x = gesture.location.x // - LayoutConstants.mixTrackRowHeaderWidth
-
+		offsetX = x
 //		let positionInMix = ZoomedDuration(displayWidth: x, zoom: zoomLevel).duration
 //		Self.notificationCenter.post(Notification.playPositionRequestedNotification(positionInMix: positionInMix))
 	}
 }
 
 #Preview("hover false") {
-	PlayHead(height: 200, x: 30, y: 10, dragged: false, hover: false)
+	AnchorHead(height: 200, x: 30, y: 10, dragged: false, hover: false)
 }
 
 #Preview("hover true") {
-	PlayHead(height: 200, x: 40, y: 20, dragged: true, hover: true)
+	AnchorHead(height: 200, x: 40, y: 20, dragged: true, hover: true)
 }
