@@ -61,6 +61,7 @@ struct ContentView: View {
 						Spacer()
 						Button("Reset") {
 							settings.resetToDefault()
+							scrollState.resetToDefault()
 						}
 					}
 					.padding([.bottom, .trailing])
