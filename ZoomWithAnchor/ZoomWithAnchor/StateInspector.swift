@@ -10,18 +10,31 @@ import SwiftUI
 struct StateInspector: View {
 	let state: ScrollState
 	
-    var body: some View {
-		VStack {
-			HStack {
-				Text("Anchor in view port:")
+	var body: some View {
+		HStack {
+			VStack(alignment: .leading) {
+				stateInformation("Anchor in view port:", state.anchorPositionInViewPort)
+				stateInformation("Relative anchor in view port:", state.relativeAnchorPositionInViewPort)
+				stateInformation("Relative anchor in content:", state.relativeAnchorPositionInContent)
+
 				Spacer()
-				Text("\(state.anchorPositionInViewPort)")
 			}
 			.padding()
 			Spacer()
 		}
-    }
+	}
+	
+	@ViewBuilder
+	private func stateInformation(_ caption: String, _ value: CGFloat) -> some View {
+		VStack(alignment: .leading) {
+			Text("\(caption):")
+				.font(.caption)
+			Text("\(value)")
+		}
+		.padding(.bottom)
+	}
 }
+
 
 #Preview {
 	StateInspector(state: .init())

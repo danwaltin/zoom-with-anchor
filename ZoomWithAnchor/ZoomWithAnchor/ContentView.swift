@@ -40,6 +40,15 @@ struct ContentView: View {
 				maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
 			.frame(width: 400)
 		}
+		.onChange(of: scrollState.anchorPositionInViewPort) {
+			updateAnchorPosition()
+		}
+		.onChange(of: zoom) {
+			updateAnchorPosition()
+		}
+		.onChange(of: scrollOffset) {
+			updateAnchorPosition()
+		}
 		.inspector(isPresented: $showSettings) {
 			GeometryReader { g in
 				VStack {
@@ -61,6 +70,11 @@ struct ContentView: View {
 		})
 	}
 	
+	private func updateAnchorPosition() {
+		scrollState.relativeAnchorPositionInViewPort = scrollState.anchorPositionInViewPort / settings.viewPortVisibleWidth
+		scrollState.relativeAnchorPositionInContent = (scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
+	}
+
 	private var zoomedWidth: CGFloat {
 		settings.contentUnzoomedWidth * zoom
 	}
