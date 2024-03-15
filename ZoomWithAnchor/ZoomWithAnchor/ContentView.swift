@@ -20,6 +20,7 @@ struct ContentView: View {
 	
 	@State var zoom: Double = noZoom
 	@State var scrollOffset: CGFloat = 0
+	@State var scrollState: ScrollState = .init()
 	
 	@State private var showSettings = true
 	
@@ -32,14 +33,23 @@ struct ContentView: View {
 			ScrollingViewPort(
 				contentWidth: zoomedWidth,
 				scrollOffset: scrollOffset,
-				settings: settings)
+				settings: settings,
+				anchorPositionInViewPort: $scrollState.anchorPositionInViewPort)
 			Scroller(
 				scrollOffset: $scrollOffset,
 				maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
 			.frame(width: 400)
 		}
 		.inspector(isPresented: $showSettings) {
-			SettingsInspector(settings: settings)
+			GeometryReader { g in
+				VStack {
+					SettingsInspector(settings: settings)
+						.frame(width: g.size.width, height: g.size.height / 2)
+					Divider()
+					StateInspector(state: scrollState)
+						.frame(width: g.size.width, height: g.size.height / 2)
+				}
+			}
 		}
 		.toolbar(content: {
 			Spacer()

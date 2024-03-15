@@ -12,17 +12,11 @@ struct ScrollingViewPort: View {
 	let scrollOffset: CGFloat
 	let settings: Settings
 	
-	@State var anchorPositionInViewPort: CGFloat = 0
+	@Binding var anchorPositionInViewPort: CGFloat
 	
 	var body: some View {
 		ZStack {
-			Ruler(
-				numberOfSegments: 10,
-				color: .green,
-				width: contentWidth,
-				height: settings.contentHeight)
-			.border(.gray)
-			.offset(.init(width: rulerOffset, height: 0))
+			scrollViewContent()
 			viewPort()
 		}
 		.frame(width: 2 * max(settings.viewPortVisibleWidth, contentWidth))
@@ -48,6 +42,17 @@ struct ScrollingViewPort: View {
 		contentWidth / 2 - settings.viewPortVisibleWidth / 2 - scrollOffset
 	}
 	
+	@ViewBuilder
+	private func scrollViewContent() -> some View {
+		Ruler(
+			numberOfSegments: 10,
+			color: .green,
+			width: contentWidth,
+			height: settings.contentHeight)
+		.border(.gray)
+		.offset(.init(width: rulerOffset, height: 0))
+	}
+
 	@ViewBuilder
 	private func viewPort() -> some View {
 		HStack(spacing: 0) {
@@ -88,5 +93,5 @@ struct ScrollingViewPort: View {
 }
 
 #Preview {
-	ScrollingViewPort(contentWidth: 200, scrollOffset: 0, settings: Settings())
+	ScrollingViewPort(contentWidth: 200, scrollOffset: 0, settings: Settings(), anchorPositionInViewPort: .constant(0))
 }
