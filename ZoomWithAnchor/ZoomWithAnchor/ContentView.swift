@@ -37,6 +37,26 @@ struct ContentView: View {
 				scrollOffset: $scrollState.scrollOffset,
 				maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
 			.frame(width: 400)
+			Divider()
+			ScrollViewReader { reader in
+				ScrollView(.horizontal) {
+					Ruler(
+						anchorId: "anchor2",
+						relativeAnchorPosition: calculateRelativeAnchorPositionInContent(),
+						numberOfSegments: 10,
+						color: .green,
+						width: zoomedWidth,
+						height: settings.contentHeight)
+					.border(.gray)
+				}
+				.frame(width: settings.viewPortVisibleWidth)
+				.onChange(of: scrollState.zoom) { oldZoom, newZoom in
+					reader.scrollTo("anchor2", anchor: .init(x: scrollState.relativeAnchorPositionInViewPort, y: 0.5))
+				}
+				Button("Goto anchor") {
+					reader.scrollTo("anchor2")
+				}
+			}
 		}
 		.onChange(of: scrollState.anchorPositionInViewPort) {
 			updateAnchorPosition()

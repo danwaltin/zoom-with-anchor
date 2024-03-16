@@ -46,6 +46,8 @@ struct ScrollingViewPort: View {
 	@ViewBuilder
 	private func scrollViewContent() -> some View {
 		Ruler(
+			anchorId: "ankare",
+			relativeAnchorPosition: 0,
 			numberOfSegments: 10,
 			color: .green,
 			width: contentWidth,
