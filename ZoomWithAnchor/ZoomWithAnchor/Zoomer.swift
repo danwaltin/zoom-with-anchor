@@ -10,23 +10,33 @@ import SwiftUI
 struct Zoomer: View {
 	
 	private static let noZoom: Double = 1
+	private let zoomStep: Double = 0.5
 	@Binding var zoom: Double
 	let settings: ZoomSettings
 
 	var body: some View {
 		HStack {
-			
-			Slider(
-				value: $zoom,
-				in: settings.minZoom...settings.maxZoom
-			){
-				Text("Zoom")
-			} minimumValueLabel: {
-				Text(settings.minZoom, format: .number.precision(.fractionLength(1)))
-			} maximumValueLabel: {
-				Text(settings.maxZoom, format: .number.precision(.fractionLength(1)))
+			Button(action: {zoom -= zoomStep}) {
+				Image(systemName: "minus")
 			}
-			.help("Zoom level")
+			.buttonStyle(BorderlessButtonStyle())
+
+			Slider(value: $zoom,
+				   in: settings.minZoom...settings.maxZoom,
+				   label: {EmptyView()},
+				   minimumValueLabel: {Text(settings.minZoom, format: .number.precision(.fractionLength(1)))},
+				   maximumValueLabel: {
+					   Text(settings.maxZoom, format: .number.precision(.fractionLength(1)))
+				   },
+				   onEditingChanged: {_ in}
+			)
+			.controlSize(.mini)
+
+				
+			Button(action: {zoom += zoomStep}) {
+				Image(systemName: "plus")
+			}
+			.buttonStyle(BorderlessButtonStyle())
 		}
 	}
 }
