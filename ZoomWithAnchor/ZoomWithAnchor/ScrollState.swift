@@ -13,6 +13,7 @@ struct ScrollState {
 	var relativeAnchorPositionInContent: CGFloat = 0
 	var zoom: Double = 1
 	var scrollOffset: CGFloat = 0
+	var scrollViewOffset: CGPoint = .zero
 	
 	mutating func resetToDefault() {
 		anchorPositionInViewPort = 0
@@ -20,5 +21,6 @@ struct ScrollState {
 		relativeAnchorPositionInContent = 0
 		zoom = 1
 		scrollOffset = 0
+		scrollViewOffset = .zero
 	}
 }

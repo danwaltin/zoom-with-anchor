@@ -39,19 +39,19 @@ struct ContentView: View {
 			.frame(width: 400)
 			Divider()
 			ScrollViewReader { reader in
-				ScrollView(.horizontal) {
-					Ruler(
-						anchorId: "anchor2",
-						relativeAnchorPosition: calculateRelativeAnchorPositionInContent(),
-						numberOfSegments: 10,
-						color: .green,
-						width: zoomedWidth,
-						height: settings.contentHeight)
-					.border(.gray)
-				}
+				Ruler(
+					anchorId: "anchor2",
+					relativeAnchorPosition: calculateRelativeAnchorPositionInContent(),
+					numberOfSegments: 10,
+					color: .green,
+					width: zoomedWidth,
+					height: settings.contentHeight)
+				.scrollable(scrollViewPosition: $scrollState.scrollViewOffset)
+				.border(.gray)
 				.frame(width: settings.viewPortVisibleWidth)
 				.onChange(of: scrollState.zoom) { oldZoom, newZoom in
-					reader.scrollTo("anchor2", anchor: .init(x: scrollState.relativeAnchorPositionInViewPort, y: 0.5))
+					reader.scrollTo(
+						"anchor2")
 				}
 				Button("Goto anchor") {
 					reader.scrollTo("anchor2")
@@ -59,6 +59,10 @@ struct ContentView: View {
 			}
 		}
 		.onChange(of: scrollState.anchorPositionInViewPort) {
+			updateAnchorPosition()
+		}
+		.onChange(of: scrollState.scrollViewOffset) {
+			print("scrollViewOffset changed to :\(scrollState.scrollViewOffset)")
 			updateAnchorPosition()
 		}
 		.onChange(of: scrollState.zoom) { oldZoom, newZoom in
@@ -110,7 +114,7 @@ struct ContentView: View {
 	}
 
 	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
-		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
+		(scrollState.scrollViewOffset.x + scrollState.anchorPositionInViewPort) / zoomedWidth
 	}
 
 	private var zoomedWidth: CGFloat {

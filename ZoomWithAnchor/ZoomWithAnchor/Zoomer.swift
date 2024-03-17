@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct Zoomer: View {
 	
 	private static let noZoom: Double = 1
@@ -15,17 +14,20 @@ struct Zoomer: View {
 	let settings: ZoomSettings
 
 	var body: some View {
-		Slider(
-			value: $zoom,
-			in: settings.minZoom...settings.maxZoom
-		){
-			Text("Zoom")
-		} minimumValueLabel: {
-			Text(settings.minZoom, format: .number.precision(.fractionLength(1)))
-		} maximumValueLabel: {
-			Text(settings.maxZoom, format: .number.precision(.fractionLength(1)))
+		HStack {
+			
+			Slider(
+				value: $zoom,
+				in: settings.minZoom...settings.maxZoom
+			){
+				Text("Zoom")
+			} minimumValueLabel: {
+				Text(settings.minZoom, format: .number.precision(.fractionLength(1)))
+			} maximumValueLabel: {
+				Text(settings.maxZoom, format: .number.precision(.fractionLength(1)))
+			}
+			.help("Zoom level")
 		}
-		.help("Zoom level")
 	}
 }
 #Preview {
