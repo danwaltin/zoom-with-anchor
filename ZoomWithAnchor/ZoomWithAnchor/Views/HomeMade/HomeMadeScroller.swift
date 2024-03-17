@@ -12,24 +12,52 @@ struct HomeMadeScroller: View {
 	@Bindable var scrollState: ScrollState
 	
 	var body: some View {
-		ScrollingViewPort(
-			contentWidth: zoomedWidth,
-			scrollOffset: scrollState.scrollOffset,
-			settings: settings,
-			relativeAnchorPositionInContent: calculateRelativeAnchorPositionInContent(),
-			anchorPositionInViewPort: $scrollState.anchorPositionInViewPort)
-		Scroller(
-			scrollOffset: $scrollState.scrollOffset,
-			maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
-		.frame(width: 400)
+		VStack {
+			Zoomer(
+				zoom: $scrollState.zoom,
+				settings: settings)
+			.frame(width: 200)
+
+			ScrollingViewPort(
+				contentWidth: zoomedWidth,
+				scrollOffset: scrollState.scrollOffset,
+				settings: settings,
+				relativeAnchorPositionInContent: calculateRelativeAnchorPositionInContent(),
+				anchorPositionInViewPort: $scrollState.anchorPositionInViewPort)
+			Scroller(
+				scrollOffset: $scrollState.scrollOffset,
+				maxScrollOffset: zoomedWidth - settings.viewPortVisibleWidth)
+			.frame(width: 400)
+		}
+		.onChange(of: scrollState.anchorPositionInViewPort) {
+			updateAnchorPosition()
+		}
+		.onChange(of: scrollState.zoom) { oldZoom, newZoom in
+			let oldContentWidth = settings.contentUnzoomedWidth * oldZoom
+			let relativeContentAnchor = (scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / oldContentWidth
+			
+			let newContentWidth = settings.contentUnzoomedWidth * newZoom
+			let newScrollOffset = relativeContentAnchor * newContentWidth - scrollState.anchorPositionInViewPort
+			scrollState.scrollOffset = newScrollOffset
+			updateAnchorPosition()
+		}
+		.onChange(of: scrollState.scrollOffset) {
+			updateAnchorPosition()
+		}
+
 	}
 	
 	private var zoomedWidth: CGFloat {
 		settings.contentUnzoomedWidth * scrollState.zoom
 	}
 
+	private func updateAnchorPosition() {
+		scrollState.relativeAnchorPositionInViewPort = scrollState.anchorPositionInViewPort / settings.viewPortVisibleWidth
+		scrollState.relativeAnchorPositionInContent = calculateRelativeAnchorPositionInContent()
+	}
+
 	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
-		(scrollState.scrollViewOffset.x + scrollState.anchorPositionInViewPort) / zoomedWidth
+		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
 	}
 }
 

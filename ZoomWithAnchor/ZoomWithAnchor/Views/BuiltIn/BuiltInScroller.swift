@@ -8,11 +8,37 @@
 import SwiftUI
 
 struct BuiltInScroller: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
+	let settings: Settings
+	@Bindable var scrollState: ScrollState
+	
+	var body: some View {
+		ScrollViewReader { reader in
+			Ruler(
+				anchorId: "anchor2",
+				relativeAnchorPosition: calculateRelativeAnchorPositionInContent(),
+				numberOfSegments: 10,
+				color: .green,
+				width: zoomedWidth,
+				height: settings.contentHeight)
+//			.scrollable(scrollViewPosition: $scrollState.scrollViewOffset)
+			.border(.gray)
+			.frame(width: settings.viewPortVisibleWidth)
+			Button("Goto anchor") {
+				reader.scrollTo("anchor2")
+			}
+		}
+	}
+	
+	private var zoomedWidth: CGFloat {
+		settings.contentUnzoomedWidth * scrollState.zoom
+	}
+
+	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
+		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
+	}
+	
 }
 
 #Preview {
-    BuiltInScroller()
+	BuiltInScroller(settings: .init(), scrollState: .init())
 }

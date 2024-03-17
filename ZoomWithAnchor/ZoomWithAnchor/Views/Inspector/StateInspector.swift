@@ -18,7 +18,6 @@ struct StateInspector: View {
 				stateInformation("Relative anchor in content", state.relativeAnchorPositionInContent)
 				stateInformation("Zoom", state.zoom)
 				stateInformation("Scroll offset", state.scrollOffset)
-				stateInformation("ScrollView offset", state.scrollViewOffset.x)
 			}
 			.padding()
 			Spacer()
