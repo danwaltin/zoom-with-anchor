@@ -30,7 +30,7 @@ struct SettingsInspector: View {
 	private func slider(_ title: String, minValue: CGFloat, maxValue: CGFloat, currentValue: Binding<CGFloat>) -> some View {
 		HStack {
 			Text(title)
-			numericText(currentValue.wrappedValue)
+			NumericText(currentValue.wrappedValue, decimals: 0)
 			Spacer()
 		}
 		.font(.headline)
@@ -42,18 +42,13 @@ struct SettingsInspector: View {
 				in: minValue...maxValue
 			) {}
 			minimumValueLabel: {
-				numericText(minValue)
+				NumericText(minValue, decimals: 0)
 			} maximumValueLabel: {
-				numericText(maxValue)
+				NumericText(maxValue, decimals: 0)
 			}
 			.controlSize(.small)
 		}
 
-	}
-	
-	@ViewBuilder
-	private func numericText(_ value: CGFloat, decimals: Int = 0) -> some View {
-		Text(value, format: .number.precision(.fractionLength(decimals)))
 	}
 }
 

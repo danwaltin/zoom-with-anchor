@@ -13,8 +13,7 @@ struct StateInspector: View {
 	var body: some View {
 		HStack {
 			VStack(alignment: .leading) {
-				stateInformation("Anchor in view port", state.anchorPositionInViewPort)
-				stateInformation("Relative anchor in view port", state.relativeAnchorPositionInViewPort)
+				stateInformation("Anchor/relative anchor in view port", state.anchorPositionInViewPort, state.relativeAnchorPositionInViewPort)
 				stateInformation("Relative anchor in content", state.relativeAnchorPositionInContent)
 				stateInformation("Zoom", state.zoom)
 				stateInformation("Scroll offset", state.scrollOffset)
@@ -29,7 +28,21 @@ struct StateInspector: View {
 		VStack(alignment: .leading) {
 			Text("\(caption):")
 				.font(.caption)
-			Text("\(value)")
+			NumericText(value, decimals: 3)
+		}
+		.padding(.bottom, 5)
+	}
+	
+	@ViewBuilder
+	private func stateInformation(_ caption: String, _ value1: CGFloat, _ value2: CGFloat) -> some View {
+		VStack(alignment: .leading) {
+			Text("\(caption):")
+				.font(.caption)
+			HStack {
+				NumericText(value1, decimals: 3)
+				Text("/")
+				NumericText(value2, decimals: 3)
+			}
 		}
 		.padding(.bottom, 5)
 	}

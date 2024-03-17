@@ -12,8 +12,6 @@ struct Ruler: View {
 
 	private let tickHeight: CGFloat = 20
 	
-	let anchorId: String
-	let relativeAnchorPosition: CGFloat
 	let numberOfSegments: Int
 	let color: Color
 	let width: CGFloat
@@ -21,9 +19,7 @@ struct Ruler: View {
 	
 	private let segments: [Int]
 	
-	init(anchorId: String, relativeAnchorPosition: CGFloat, numberOfSegments: Int, color: Color, width: CGFloat, height: CGFloat) {
-		self.anchorId = anchorId
-		self.relativeAnchorPosition = relativeAnchorPosition
+	init(numberOfSegments: Int, color: Color, width: CGFloat, height: CGFloat) {
 		self.numberOfSegments = numberOfSegments
 		self.color = color
 		self.width = width
@@ -33,19 +29,9 @@ struct Ruler: View {
 	
 	var body: some View {
 		ZStack {
-			HStack(spacing: 0) {
-				Rectangle()
-					.fill(BackgroundStyle())
-					.frame(width: max(0, width * relativeAnchorPosition))
-				Image(systemName: "target")
-					.id(anchorId)
-					.frame(width: 1, height: 1)
-				Spacer()
-			}
 			ForEach(segments, id: \.self) { i in
 				tick(number: i, x: segmentWidth * CGFloat(i))
 			}
-			
 		}
 		.frame(width: width, height: height)
 		.background(
@@ -71,9 +57,7 @@ struct Ruler: View {
 }
 
 #Preview("Ruler") {
-	Ruler(anchorId: "x", 
-		  relativeAnchorPosition: 0,
-		  numberOfSegments: 10,
+	Ruler(numberOfSegments: 10,
 		  color: .green,
 		  width: 200,
 		  height: 50)
