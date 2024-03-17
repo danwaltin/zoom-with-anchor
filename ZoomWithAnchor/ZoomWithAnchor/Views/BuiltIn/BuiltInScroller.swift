@@ -22,9 +22,8 @@ struct BuiltInScroller: View {
 				ScrollView(.horizontal) {
 					Ruler(
 						numberOfSegments: 10,
-						color: .green,
-						width: zoomedWidth,
-						height: settings.contentHeight)
+						color: .green)
+					.frame(width: zoomedWidth, height: settings.contentHeight)
 					.background(
 						scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
 					)

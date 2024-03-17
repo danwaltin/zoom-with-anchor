@@ -47,9 +47,8 @@ struct ScrollingViewPort: View {
 	private func scrollViewContent() -> some View {
 		Ruler(
 			numberOfSegments: 10,
-			color: .green,
-			width: contentWidth,
-			height: settings.contentHeight)
+			color: .green)
+		.frame(width: contentWidth, height: settings.contentHeight)
 		.border(.gray)
 		.offset(.init(width: rulerOffset, height: 0))
 	}
