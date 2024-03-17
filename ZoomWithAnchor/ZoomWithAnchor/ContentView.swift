@@ -97,24 +97,9 @@ struct ContentView: View {
 			updateAnchorPosition()
 		}
 		.inspector(isPresented: $showSettings) {
-			GeometryReader { g in
-				VStack {
-					SettingsInspector(settings: settings)
-						.frame(width: g.size.width)
-					Divider()
-					StateInspector(state: scrollState)
-						.frame(width: g.size.width)
-					Spacer()
-					Divider()
-					HStack {
-						Spacer()
-						Button("Reset") {
-							settings.resetToDefault()
-							scrollState.resetToDefault()
-						}
-					}
-					.padding([.bottom, .trailing])
-				}
+			Inspector(settings: settings, state: scrollState) {
+				settings.resetToDefault()
+				scrollState.resetToDefault()
 			}
 		}
 		.toolbar(content: {

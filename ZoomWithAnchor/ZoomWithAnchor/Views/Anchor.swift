@@ -108,10 +108,8 @@ struct Anchor: View {
 	
 	private func playHeadDragEndend(_ gesture: DragGesture.Value) {
 		isDragging = false
-		let x = gesture.location.x // - LayoutConstants.mixTrackRowHeaderWidth
+		let x = gesture.location.x
 		offsetX = x
-//		let positionInMix = ZoomedDuration(displayWidth: x, zoom: zoomLevel).duration
-//		Self.notificationCenter.post(Notification.playPositionRequestedNotification(positionInMix: positionInMix))
 	}
 }
 

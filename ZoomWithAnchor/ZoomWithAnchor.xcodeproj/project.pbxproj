@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37233BF02BA71F40008DF7C9 /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37233BEF2BA71F40008DF7C9 /* Inspector.swift */; };
+		37233BF42BA720F1008DF7C9 /* HomeMadeScroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37233BF32BA720F1008DF7C9 /* HomeMadeScroller.swift */; };
+		37233BF62BA720FF008DF7C9 /* BuiltInScroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37233BF52BA720FF008DF7C9 /* BuiltInScroller.swift */; };
 		3755C0992B925376002D9E04 /* Ruler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3755C0982B925376002D9E04 /* Ruler.swift */; };
 		3755C09B2B9266CC002D9E04 /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3755C09A2B9266CC002D9E04 /* Scroller.swift */; };
 		3755C09D2B926727002D9E04 /* Zoomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3755C09C2B926727002D9E04 /* Zoomer.swift */; };
@@ -24,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37233BEF2BA71F40008DF7C9 /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
+		37233BF32BA720F1008DF7C9 /* HomeMadeScroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMadeScroller.swift; sourceTree = "<group>"; };
+		37233BF52BA720FF008DF7C9 /* BuiltInScroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuiltInScroller.swift; sourceTree = "<group>"; };
 		3755C0982B925376002D9E04 /* Ruler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ruler.swift; sourceTree = "<group>"; };
 		3755C09A2B9266CC002D9E04 /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
 		3755C09C2B926727002D9E04 /* Zoomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zoomer.swift; sourceTree = "<group>"; };
@@ -53,6 +59,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37233BEC2BA71EA1008DF7C9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				37233BF22BA720D5008DF7C9 /* BuiltIn */,
+				37233BF12BA720CB008DF7C9 /* HomeMade */,
+				37233BEE2BA71EDC008DF7C9 /* Inspector */,
+				3755C0982B925376002D9E04 /* Ruler.swift */,
+				3755C09C2B926727002D9E04 /* Zoomer.swift */,
+				37FD646E2B94730E00A2884F /* Anchor.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		37233BED2BA71EBD008DF7C9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				37FD646A2B93023400A2884F /* Settings.swift */,
+				37FD64722BA4A95400A2884F /* ScrollState.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		37233BEE2BA71EDC008DF7C9 /* Inspector */ = {
+			isa = PBXGroup;
+			children = (
+				37FD64682B9300E200A2884F /* SettingsInspector.swift */,
+				37FD64702BA4A5BF00A2884F /* StateInspector.swift */,
+				37233BEF2BA71F40008DF7C9 /* Inspector.swift */,
+			);
+			path = Inspector;
+			sourceTree = "<group>";
+		};
+		37233BF12BA720CB008DF7C9 /* HomeMade */ = {
+			isa = PBXGroup;
+			children = (
+				3755C09A2B9266CC002D9E04 /* Scroller.swift */,
+				37FD646C2B930B2900A2884F /* ScrollingViewPort.swift */,
+				37233BF32BA720F1008DF7C9 /* HomeMadeScroller.swift */,
+			);
+			path = HomeMade;
+			sourceTree = "<group>";
+		};
+		37233BF22BA720D5008DF7C9 /* BuiltIn */ = {
+			isa = PBXGroup;
+			children = (
+				37FD64762BA6DA8200A2884F /* ScrollOffsetReader.swift */,
+				37233BF52BA720FF008DF7C9 /* BuiltInScroller.swift */,
+			);
+			path = BuiltIn;
+			sourceTree = "<group>";
+		};
 		37FD644D2B9112B600A2884F = {
 			isa = PBXGroup;
 			children = (
@@ -72,21 +129,13 @@
 		37FD64582B9112B600A2884F /* ZoomWithAnchor */ = {
 			isa = PBXGroup;
 			children = (
+				37233BED2BA71EBD008DF7C9 /* Models */,
+				37233BEC2BA71EA1008DF7C9 /* Views */,
 				37FD64592B9112B600A2884F /* ZoomWithAnchorApp.swift */,
 				37FD645B2B9112B600A2884F /* ContentView.swift */,
 				37FD645D2B9112BA00A2884F /* Assets.xcassets */,
 				37FD64622B9112BA00A2884F /* ZoomWithAnchor.entitlements */,
 				37FD645F2B9112BA00A2884F /* Preview Content */,
-				3755C0982B925376002D9E04 /* Ruler.swift */,
-				3755C09A2B9266CC002D9E04 /* Scroller.swift */,
-				3755C09C2B926727002D9E04 /* Zoomer.swift */,
-				37FD64682B9300E200A2884F /* SettingsInspector.swift */,
-				37FD64702BA4A5BF00A2884F /* StateInspector.swift */,
-				37FD646C2B930B2900A2884F /* ScrollingViewPort.swift */,
-				37FD646E2B94730E00A2884F /* Anchor.swift */,
-				37FD646A2B93023400A2884F /* Settings.swift */,
-				37FD64722BA4A95400A2884F /* ScrollState.swift */,
-				37FD64762BA6DA8200A2884F /* ScrollOffsetReader.swift */,
 			);
 			path = ZoomWithAnchor;
 			sourceTree = "<group>";
@@ -171,13 +220,16 @@
 			files = (
 				37FD64772BA6DA8200A2884F /* ScrollOffsetReader.swift in Sources */,
 				37FD645C2B9112B600A2884F /* ContentView.swift in Sources */,
+				37233BF62BA720FF008DF7C9 /* BuiltInScroller.swift in Sources */,
 				37FD645A2B9112B600A2884F /* ZoomWithAnchorApp.swift in Sources */,
 				3755C0992B925376002D9E04 /* Ruler.swift in Sources */,
 				3755C09B2B9266CC002D9E04 /* Scroller.swift in Sources */,
 				37FD64732BA4A95400A2884F /* ScrollState.swift in Sources */,
 				37FD646B2B93023400A2884F /* Settings.swift in Sources */,
+				37233BF42BA720F1008DF7C9 /* HomeMadeScroller.swift in Sources */,
 				37FD64692B9300E200A2884F /* SettingsInspector.swift in Sources */,
 				3755C09D2B926727002D9E04 /* Zoomer.swift in Sources */,
+				37233BF02BA71F40008DF7C9 /* Inspector.swift in Sources */,
 				37FD646F2B94730E00A2884F /* Anchor.swift in Sources */,
 				37FD646D2B930B2900A2884F /* ScrollingViewPort.swift in Sources */,
 				37FD64712BA4A5BF00A2884F /* StateInspector.swift in Sources */,

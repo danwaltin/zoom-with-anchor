@@ -36,7 +36,7 @@ struct Ruler: View {
 			HStack(spacing: 0) {
 				Rectangle()
 					.fill(BackgroundStyle())
-					.frame(width: width * relativeAnchorPosition)
+					.frame(width: max(0, width * relativeAnchorPosition))
 				Image(systemName: "target")
 					.id(anchorId)
 					.frame(width: 1, height: 1)
