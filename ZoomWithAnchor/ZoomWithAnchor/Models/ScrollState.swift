@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ScrollState {
+@Observable class ScrollState {
 	var anchorPositionInViewPort: CGFloat = 0
 	var relativeAnchorPositionInViewPort: CGFloat = 0
 	var relativeAnchorPositionInContent: CGFloat = 0
@@ -15,7 +15,7 @@ struct ScrollState {
 	var scrollOffset: CGFloat = 0
 	var scrollViewOffset: CGPoint = .zero
 	
-	mutating func resetToDefault() {
+	func resetToDefault() {
 		anchorPositionInViewPort = 0
 		relativeAnchorPositionInViewPort = 0
 		relativeAnchorPositionInContent = 0

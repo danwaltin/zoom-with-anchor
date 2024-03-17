@@ -9,17 +9,23 @@ import SwiftUI
 
 struct Inspector: View {
 	@Bindable var settings: Settings
-	let state: ScrollState
+	let scrollStateHomeMade: ScrollState
+	let scrollStateBuiltIn: ScrollState
 
 	let reset: () -> Void
 	
 	var body: some View {
 		GeometryReader { g in
-			VStack {
+			ScrollView {
 				SettingsInspector(settings: settings)
 					.frame(width: g.size.width)
 				Divider()
-				StateInspector(state: state)
+				Text("Home made")
+				StateInspector(state: scrollStateHomeMade)
+					.frame(width: g.size.width)
+				Divider()
+				Text("Built in")
+				StateInspector(state: scrollStateBuiltIn)
 					.frame(width: g.size.width)
 				Spacer()
 				Divider()
@@ -31,9 +37,10 @@ struct Inspector: View {
 				}
 				.padding([.bottom, .trailing])
 			}
-		}    }
+		}
+	}
 }
 
 #Preview {
-	Inspector(settings: .init(), state: .init(), reset: {})
+	Inspector(settings: .init(), scrollStateHomeMade: .init(), scrollStateBuiltIn: .init(), reset: {})
 }
