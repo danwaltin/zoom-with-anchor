@@ -34,7 +34,7 @@ extension View {
 	}
 }
 
-fileprivate struct ScrollViewHorizontalOffsetKey: PreferenceKey {
+struct ScrollViewHorizontalOffsetKey: PreferenceKey {
 	typealias Value = CGFloat
 	static var defaultValue = CGFloat.zero
 	static func reduce(value: inout Value, nextValue: () -> Value) {
@@ -42,7 +42,7 @@ fileprivate struct ScrollViewHorizontalOffsetKey: PreferenceKey {
 	}
 }
 
-fileprivate struct ScrollViewVerticalOffsetKey: PreferenceKey {
+struct ScrollViewVerticalOffsetKey: PreferenceKey {
 	typealias Value = CGFloat
 	static var defaultValue = CGFloat.zero
 	static func reduce(value: inout Value, nextValue: () -> Value) {
@@ -51,7 +51,7 @@ fileprivate struct ScrollViewVerticalOffsetKey: PreferenceKey {
 }
 
 @ViewBuilder
-fileprivate func scrollOffsetReader(coordinateSpace: String) -> some View {
+func scrollOffsetReader(coordinateSpace: String) -> some View {
 	GeometryReader {
 		Color.clear.preference(key: ScrollViewHorizontalOffsetKey.self, value: -$0.frame(in: .named(coordinateSpace)).origin.x)
 		Color.clear.preference(key: ScrollViewVerticalOffsetKey.self, value: -$0.frame(in: .named(coordinateSpace)).origin.y)
@@ -59,14 +59,14 @@ fileprivate func scrollOffsetReader(coordinateSpace: String) -> some View {
 }
 
 @ViewBuilder
-fileprivate func horizontalScrollOffsetReader(coordinateSpace: String) -> some View {
+ func horizontalScrollOffsetReader(coordinateSpace: String) -> some View {
 	GeometryReader {
 		Color.clear.preference(key: ScrollViewHorizontalOffsetKey.self, value: -$0.frame(in: .named(coordinateSpace)).origin.x)
 	}
 }
 
 @ViewBuilder
-fileprivate func verticalScrollOffsetReader(coordinateSpace: String) -> some View {
+func verticalScrollOffsetReader(coordinateSpace: String) -> some View {
 	GeometryReader {
 		Color.clear.preference(key: ScrollViewVerticalOffsetKey.self, value: -$0.frame(in: .named(coordinateSpace)).origin.y)
 	}

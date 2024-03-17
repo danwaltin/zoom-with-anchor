@@ -13,19 +13,27 @@ struct BuiltInScroller: View {
 	
 	var body: some View {
 		ScrollViewReader { reader in
-			Ruler(
-				anchorId: "anchor2",
-				relativeAnchorPosition: calculateRelativeAnchorPositionInContent(),
-				numberOfSegments: 10,
-				color: .green,
-				width: zoomedWidth,
-				height: settings.contentHeight)
-//			.scrollable(scrollViewPosition: $scrollState.scrollViewOffset)
+			ScrollView(.horizontal) {
+				Ruler(
+					anchorId: "anchor2",
+					relativeAnchorPosition: calculateRelativeAnchorPositionInContent(),
+					numberOfSegments: 10,
+					color: .green,
+					width: zoomedWidth,
+					height: settings.contentHeight)
+				.background(
+					scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
+				)
+				.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
+					scrollState.scrollOffset = $0
+				}
+			}
+			.frame(width: settings.viewPortVisibleWidth, height: settings.contentHeight)
 			.border(.gray)
-			.frame(width: settings.viewPortVisibleWidth)
 			Button("Goto anchor") {
 				reader.scrollTo("anchor2")
 			}
+			.coordinateSpace(name: "scrollCoordinateSpace")
 		}
 	}
 	

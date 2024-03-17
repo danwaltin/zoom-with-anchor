@@ -25,11 +25,13 @@ struct ContentView: View {
 	var body: some View {
 		
 		VSplitView {
-			GeometryReader{ _ in
+			GeometryReader{ g in
 				HomeMadeScroller(settings: settings, scrollState: scrollStateHomeMade)
+					.frame(width: g.size.width, height: g.size.height)
 			}
-			GeometryReader{ _ in
+			GeometryReader{ g in
 				BuiltInScroller(settings: settings, scrollState: scrollStateBuiltIn)
+					.frame(width: g.size.width, height: g.size.height)
 			}
 		}
 		.inspector(isPresented: $showSettings) {
