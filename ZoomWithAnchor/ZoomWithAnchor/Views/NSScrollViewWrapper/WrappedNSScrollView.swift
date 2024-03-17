@@ -10,11 +10,9 @@ import SwiftUI
 struct NSScrollViewWrapper<Content: View>: NSViewRepresentable {
 	typealias NSViewType = NSScrollView
 	
-	var content: Content
+	@Binding var contentWidth: CGFloat
 	
-	init(@ViewBuilder content: () -> Content) {
-		self.content = content()
-	}
+	@ViewBuilder var content: Content
 	
 	func makeNSView(context: Context) -> NSScrollView {
 		let view = NSScrollView()
@@ -29,6 +27,7 @@ struct NSScrollViewWrapper<Content: View>: NSViewRepresentable {
 		document.translatesAutoresizingMaskIntoConstraints = false
 		view.documentView = document
 		
+		view.contentView.clipsToBounds = false
 		return view
 	}
 		
@@ -36,19 +35,37 @@ struct NSScrollViewWrapper<Content: View>: NSViewRepresentable {
 		// You might update the NSScrollView here based on changes in the SwiftUI view
 		// For example, you could adjust scroller visibility or content size dynamically
 		// This method is called when the SwiftUI view needs to be updated.
+		print("Updating nsview, frame = \(nsView.contentView.frame)")
+		print("New width              = \(contentWidth)")
+
+		let newSize = CGSize(width: contentWidth, height: nsView.contentView.frame.height)
+		
+		nsView.contentView.setFrameSize(newSize)
+		print("Width after             = \(nsView.contentView.frame.width)")
 	}
 }
 struct WrappedNSScrollView: View {
 	let settings: Settings
 	@Bindable var scrollState: ScrollState
 
+	@State var zoomedWidth: CGFloat
+	
+	init(settings: Settings, scrollState: ScrollState) {
+		self.settings = settings
+		self.scrollState = scrollState
+		self.zoomedWidth = settings.contentUnzoomedWidth * scrollState.zoom
+	}
+	
 	var body: some View {
 		VStack {
 			Zoomer(
 				zoom: $scrollState.zoom,
 				settings: settings)
 			.frame(width: 200)
-			NSScrollViewWrapper {
+			.onChange(of: scrollState.zoom) {
+				zoomedWidth = settings.contentUnzoomedWidth * scrollState.zoom
+			}
+			NSScrollViewWrapper(contentWidth: $zoomedWidth) {
 				Ruler(
 					numberOfSegments: 10,
 					color: .green)
@@ -57,11 +74,6 @@ struct WrappedNSScrollView: View {
 			.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
 		}
 	}
-	
-	private var zoomedWidth: CGFloat {
-		settings.contentUnzoomedWidth * scrollState.zoom
-	}
-
 }
 
 #Preview {

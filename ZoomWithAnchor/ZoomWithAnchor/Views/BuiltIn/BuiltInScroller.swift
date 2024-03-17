@@ -11,13 +11,24 @@ struct BuiltInScroller: View {
 	let settings: Settings
 	@Bindable var scrollState: ScrollState
 	
+	@State var zoomedWidth: CGFloat
+
+	init(settings: Settings, scrollState: ScrollState) {
+		self.settings = settings
+		self.scrollState = scrollState
+		self.zoomedWidth = settings.contentUnzoomedWidth * scrollState.zoom
+	}
+
 	var body: some View {
 		VStack {
 			Zoomer(
 				zoom: $scrollState.zoom,
 				settings: settings)
 			.frame(width: 200)
-			
+			.onChange(of: scrollState.zoom) {
+				zoomedWidth = settings.contentUnzoomedWidth * scrollState.zoom
+			}
+
 			ScrollViewReader { reader in
 				ScrollView(.horizontal) {
 					Ruler(
@@ -37,9 +48,6 @@ struct BuiltInScroller: View {
 				.coordinateSpace(name: "scrollCoordinateSpace")
 			}
 		}
-	}
-	private var zoomedWidth: CGFloat {
-		settings.contentUnzoomedWidth * scrollState.zoom
 	}
 }
 
