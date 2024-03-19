@@ -11,45 +11,60 @@ struct BuiltInScroller: View {
 	let settings: Settings
 	@Bindable var scrollState: ScrollState
 	
-	@State var zoomedWidth: CGFloat = 0
-
-	init(settings: Settings, scrollState: ScrollState) {
-		self.settings = settings
-		self.scrollState = scrollState
-		self.zoomedWidth = settings.contentUnzoomedWidth * scrollState.zoom
-	}
-
 	var body: some View {
 		VStack {
 			Zoomer(
 				zoom: $scrollState.zoom,
 				settings: settings)
 			.frame(width: 200)
-			.onChange(of: scrollState.zoom) {
-				zoomedWidth = settings.contentUnzoomedWidth * scrollState.zoom
-			}
 
 			ScrollViewReader { reader in
-
-				ScrollView(.horizontal) {
-					Ruler(
-						numberOfSegments: 10,
-						color: .green)
-					.frame(width: zoomedWidth, height: settings.contentHeight)
-					.background(
-						scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
-					)
-					.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
-						scrollState.scrollOffset = $0
+				ZStack {
+					ScrollView(.horizontal) {
+						Ruler(
+							numberOfSegments: 10,
+							color: .green)
+						.frame(width: zoomedWidth, height: settings.contentHeight)
+						.background(
+							scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
+						)
+						.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
+							scrollState.scrollOffset = $0
+						}
 					}
+					.scrollClipDisabled(true)
+					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
+					.border(.gray)
+					.coordinateSpace(name: "scrollCoordinateSpace")
+					Anchor(
+						height: settings.viewPortHeight,
+						offsetX: $scrollState.anchorPositionInViewPort)
+					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
 				}
-				.scrollClipDisabled(true)
-				.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
-				.border(.gray)
-				.coordinateSpace(name: "scrollCoordinateSpace")
 			}
 		}
+		.onChange(of: scrollState.anchorPositionInViewPort) {
+			updateAnchorPosition()
+		}
+		.onChange(of: scrollState.scrollOffset) {
+			updateAnchorPosition()
+		}
+
 	}
+	
+	private var zoomedWidth: CGFloat {
+		settings.contentUnzoomedWidth * scrollState.zoom
+	}
+
+	private func updateAnchorPosition() {
+		scrollState.relativeAnchorPositionInViewPort = scrollState.anchorPositionInViewPort / settings.viewPortVisibleWidth
+		scrollState.relativeAnchorPositionInContent = calculateRelativeAnchorPositionInContent()
+	}
+
+	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
+		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
+	}
+
 }
 
 #Preview {
