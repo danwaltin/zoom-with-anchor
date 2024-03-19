@@ -31,15 +31,21 @@ struct BuiltInScroller: View {
 						.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
 							scrollState.scrollOffset = $0
 						}
+						.id("qwerty123")
 					}
 					.scrollClipDisabled(true)
 					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
 					.border(.gray)
 					.coordinateSpace(name: "scrollCoordinateSpace")
+					
 					Anchor(
 						height: settings.viewPortHeight,
 						offsetX: $scrollState.anchorPositionInViewPort)
 					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
+				}
+				.onChange(of: scrollState.zoom) {
+					updateAnchorPosition()
+					reader.scrollTo("qwerty123", anchor: .init(x: scrollState.relativeAnchorPositionInContent, y: 0.5))
 				}
 			}
 		}
