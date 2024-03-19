@@ -11,7 +11,7 @@ struct BuiltInScroller: View {
 	let settings: Settings
 	@Bindable var scrollState: ScrollState
 	
-	@State var zoomedWidth: CGFloat
+	@State var zoomedWidth: CGFloat = 0
 
 	init(settings: Settings, scrollState: ScrollState) {
 		self.settings = settings
@@ -30,6 +30,7 @@ struct BuiltInScroller: View {
 			}
 
 			ScrollViewReader { reader in
+
 				ScrollView(.horizontal) {
 					Ruler(
 						numberOfSegments: 10,

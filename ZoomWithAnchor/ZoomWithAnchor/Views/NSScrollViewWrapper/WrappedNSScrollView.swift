@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+fileprivate class ScrollViewContainer: ObservableObject {
+	var scrollView: NSScrollView?
+}
+
 struct NSScrollViewWrapper<Content: View>: NSViewRepresentable {
 	typealias NSViewType = NSScrollView
 	
@@ -14,19 +18,22 @@ struct NSScrollViewWrapper<Content: View>: NSViewRepresentable {
 	
 	@ViewBuilder var content: Content
 	
+	@StateObject fileprivate var scrollViewContainer = ScrollViewContainer()
+	
 	func makeNSView(context: Context) -> NSScrollView {
 		let view = NSScrollView()
 		
 		// Configure your NSScrollView here
 		// For example:
 		view.hasHorizontalScroller = true
-		view.hasVerticalScroller = true
+		view.hasVerticalScroller = false
 		view.autohidesScrollers = false
 		
 		let document = NSHostingView(rootView: content)
 		document.translatesAutoresizingMaskIntoConstraints = false
 		view.documentView = document
 		
+		scrollViewContainer.scrollView = view
 		view.contentView.clipsToBounds = false
 		return view
 	}
@@ -35,20 +42,19 @@ struct NSScrollViewWrapper<Content: View>: NSViewRepresentable {
 		// You might update the NSScrollView here based on changes in the SwiftUI view
 		// For example, you could adjust scroller visibility or content size dynamically
 		// This method is called when the SwiftUI view needs to be updated.
-		print("Updating nsview, frame = \(nsView.contentView.frame)")
-		print("New width              = \(contentWidth)")
 
-		let newSize = CGSize(width: contentWidth, height: nsView.contentView.frame.height)
-		
-		nsView.contentView.setFrameSize(newSize)
-		print("Width after             = \(nsView.contentView.frame.width)")
+		let currentBounds = nsView.contentView.bounds
+		let newBoundsSize = NSSize(width: max(0, currentBounds.width - 10), height: currentBounds.height)
+		let newBoundsOrigin = NSPoint(x: currentBounds.origin.x + 10, y: currentBounds.origin.y)
+		nsView.contentView.setBoundsSize(newBoundsSize)
+		nsView.contentView.setBoundsOrigin(newBoundsOrigin)
 	}
 }
 struct WrappedNSScrollView: View {
 	let settings: Settings
 	@Bindable var scrollState: ScrollState
 
-	@State var zoomedWidth: CGFloat
+	@State var zoomedWidth: CGFloat = 250
 	
 	init(settings: Settings, scrollState: ScrollState) {
 		self.settings = settings
@@ -70,6 +76,7 @@ struct WrappedNSScrollView: View {
 					numberOfSegments: 10,
 					color: .green)
 				.frame(width: zoomedWidth, height: settings.contentHeight)
+				.border(.red)
 			}
 			.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
 		}
