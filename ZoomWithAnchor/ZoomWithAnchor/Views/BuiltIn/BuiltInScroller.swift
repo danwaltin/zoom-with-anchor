@@ -17,35 +17,58 @@ struct BuiltInScroller: View {
 				zoom: $scrollState.zoom,
 				settings: settings)
 			.frame(width: 200)
-
+			
 			ScrollViewReader { reader in
 				ZStack {
 					ScrollView(.horizontal) {
-						Ruler(
-							numberOfSegments: 10,
-							color: .green)
-						.frame(width: zoomedWidth, height: settings.contentHeight)
-						.background(
-							scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
-						)
-						.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
-							scrollState.scrollOffset = $0
+						ZStack {
+							HStack(spacing: 0) {
+								Rectangle()
+									.frame(width: max(0, scrollState.scrollOffset))
+									.foregroundStyle(.gray)
+								
+								Rectangle()
+									.frame(width: settings.viewPortVisibleWidth)
+									.foregroundStyle(.green)
+									.id("qwerty123")
+								
+								Rectangle()
+									.frame(width: max(0, zoomedWidth - settings.viewPortVisibleWidth - scrollState.scrollOffset))
+									.foregroundStyle(.gray)
+							}
+							
+							Ruler(
+								numberOfSegments: 10,
+								color: .green)
+							.frame(width: zoomedWidth, height: settings.contentHeight)
+							.background(
+								scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
+							)
+							.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
+								scrollState.scrollOffset = $0
+							}
+							
+							
 						}
-						.id("qwerty123")
 					}
 					.scrollClipDisabled(true)
 					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
 					.border(.gray)
 					.coordinateSpace(name: "scrollCoordinateSpace")
+					.onChange(of: scrollState.zoom) { old, new in
+						print("""
+	  old zoom    : \(old)
+	  new zoom    : \(new)
+	  zoomed width: \(zoomedWidth)
+	  """)
+						reader.scrollTo("qwerty123", anchor: .init(x: scrollState.relativeAnchorPositionInContent, y: 0.5))
+					}
 					
 					Anchor(
 						height: settings.viewPortHeight,
 						offsetX: $scrollState.anchorPositionInViewPort)
 					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
-				}
-				.onChange(of: scrollState.zoom) {
-					updateAnchorPosition()
-					reader.scrollTo("qwerty123", anchor: .init(x: scrollState.relativeAnchorPositionInContent, y: 0.5))
+					.border(.red)
 				}
 			}
 		}
@@ -55,22 +78,22 @@ struct BuiltInScroller: View {
 		.onChange(of: scrollState.scrollOffset) {
 			updateAnchorPosition()
 		}
-
+		
 	}
 	
 	private var zoomedWidth: CGFloat {
 		settings.contentUnzoomedWidth * scrollState.zoom
 	}
-
+	
 	private func updateAnchorPosition() {
 		scrollState.relativeAnchorPositionInViewPort = scrollState.anchorPositionInViewPort / settings.viewPortVisibleWidth
 		scrollState.relativeAnchorPositionInContent = calculateRelativeAnchorPositionInContent()
 	}
-
+	
 	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
 		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
 	}
-
+	
 }
 
 #Preview {

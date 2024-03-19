@@ -19,7 +19,6 @@ struct ContentView: View {
 	@State var settings = Settings()
 	@State var scrollStateHomeMade = ScrollState()
 	@State var scrollStateBuiltIn = ScrollState()
-	@State var scrollStateNSWrapped = ScrollState()
 
 	@State private var showSettings = true
 	
@@ -34,20 +33,14 @@ struct ContentView: View {
 				BuiltInScroller(settings: settings, scrollState: scrollStateBuiltIn)
 					.frame(width: g.size.width, height: g.size.height)
 			}
-			GeometryReader{ g in
-				WrappedNSScrollView(settings: settings, scrollState: scrollStateNSWrapped)
-					.frame(width: g.size.width, height: g.size.height)
-			}
 		}
 		.inspector(isPresented: $showSettings) {
 			Inspector(settings: settings, 
 					  scrollStateHomeMade: scrollStateHomeMade,
-					  scrollStateBuiltIn: scrollStateBuiltIn,
-					  scrollStateNSWrapped: scrollStateNSWrapped) {
+					  scrollStateBuiltIn: scrollStateBuiltIn) {
 				settings.resetToDefault()
 				scrollStateHomeMade.resetToDefault()
 				scrollStateBuiltIn.resetToDefault()
-				scrollStateNSWrapped.resetToDefault()
 			}
 		}
 		.toolbar(content: {

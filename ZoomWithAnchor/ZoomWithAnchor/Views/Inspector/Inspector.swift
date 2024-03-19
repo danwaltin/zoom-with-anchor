@@ -11,7 +11,6 @@ struct Inspector: View {
 	@Bindable var settings: Settings
 	let scrollStateHomeMade: ScrollState
 	let scrollStateBuiltIn: ScrollState
-	let scrollStateNSWrapped: ScrollState
 
 	let reset: () -> Void
 	
@@ -28,10 +27,6 @@ struct Inspector: View {
 				Text("Built in ScrollView")
 				StateInspector(state: scrollStateBuiltIn)
 					.frame(width: g.size.width)
-				Divider()
-				Text("Wrapped NSScrollView")
-				StateInspector(state: scrollStateNSWrapped)
-					.frame(width: g.size.width)
 				Spacer()
 				Divider()
 				HStack {
@@ -47,5 +42,5 @@ struct Inspector: View {
 }
 
 #Preview {
-	Inspector(settings: .init(), scrollStateHomeMade: .init(), scrollStateBuiltIn: .init(), scrollStateNSWrapped: .init(), reset: {})
+	Inspector(settings: .init(), scrollStateHomeMade: .init(), scrollStateBuiltIn: .init(), reset: {})
 }
