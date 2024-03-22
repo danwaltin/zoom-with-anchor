@@ -7,44 +7,44 @@
 
 import SwiftUI
 
-protocol ZoomSettings {
-	var minZoom: Double {get}
-	var maxZoom: Double {get}
-}
+fileprivate let unzoomedContentWidth: CGFloat = 400
+fileprivate let contentHeight: CGFloat = 50
+
+fileprivate let viewPortWidth: CGFloat = 300
+fileprivate let viewPortHeight: CGFloat = 100
 
 struct ContentView: View {
+	@State var zoom: Double = Zoomer.noZoom
 	
-	private static let noZoom: Double = 1
-	
-	@State var settings = Settings()
-	@State var scrollStateHomeMade = ScrollState()
-	@State var scrollStateBuiltIn = ScrollState()
+	@State var contentWidth = unzoomedContentWidth
+	@State var anchorViewPortOffset: CGFloat = 0
 
-	@State private var showSettings = true
-	
 	var body: some View {
-		
-		VSplitView {
-			GeometryReader{ g in
-				BuiltInScroller(settings: settings, scrollState: scrollStateBuiltIn)
-					.frame(width: g.size.width, height: g.size.height)
+		VStack {
+			Zoomer(
+				zoom: $zoom)
+			.frame(width: viewPortWidth)
+			
+			ZStack {
+				ScrollView(.horizontal) {
+					Ruler(
+						numberOfSegments: 10,
+						color: .green)
+					.frame(width: contentWidth, height: contentHeight)
+				}
+				.scrollClipDisabled(true)
+				.frame(width: viewPortWidth, height: viewPortHeight)
+				.border(.gray)
+				.onChange(of: zoom) {
+					contentWidth = zoom * unzoomedContentWidth
+				}
+				
+				Anchor(
+					height: viewPortHeight,
+					offsetX: $anchorViewPortOffset)
+				.frame(width: viewPortWidth, height: viewPortHeight)
 			}
 		}
-		.inspector(isPresented: $showSettings) {
-			Inspector(settings: settings, 
-					  scrollStateBuiltIn: scrollStateBuiltIn) {
-				settings.resetToDefault()
-				scrollStateBuiltIn.resetToDefault()
-			}
-		}
-		.toolbar(content: {
-			Spacer()
-			Button {
-				showSettings.toggle()
-			} label: {
-				Image(systemName: "sidebar.trailing")
-			}
-		})
 	}
 }
 
