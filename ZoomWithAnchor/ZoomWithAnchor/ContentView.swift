@@ -27,9 +27,7 @@ struct ContentView: View {
 			
 			ZStack {
 				ScrollView(.horizontal) {
-					Ruler(
-						numberOfSegments: 10,
-						color: .green)
+					Ruler(numberOfSegments: 10, zoom: zoom)
 					.frame(width: contentWidth, height: contentHeight)
 				}
 				.scrollClipDisabled(true)

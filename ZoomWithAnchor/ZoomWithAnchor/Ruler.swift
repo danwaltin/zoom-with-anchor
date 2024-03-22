@@ -8,51 +8,90 @@
 import SwiftUI
 
 struct Ruler: View {
-
-	private let tickHeight: CGFloat = 20
 	
-	let numberOfSegments: Int
-	let color: Color
+	private let mainTickHeight: CGFloat = 20
+	private let subTickHeight: CGFloat = 10
+
+	private let numberOfSegments: Int
+	private let zoom: Double
+	private let color: Color = .green
 	
 	private let segments: [Int]
 	
-	init(numberOfSegments: Int, color: Color) {
+	init(numberOfSegments: Int, zoom: Double) {
 		self.numberOfSegments = numberOfSegments
-		self.color = color
-		segments = Array(1..<numberOfSegments)
+		self.zoom = zoom
+		segments = Array(0..<(numberOfSegments + 1))
 	}
 	
 	var body: some View {
 		GeometryReader { g in
 			ZStack {
 				ForEach(segments, id: \.self) { i in
-					tick(number: i, x: g.size.width / CGFloat(numberOfSegments) * CGFloat(i), height: g.size.height)
+					tick(
+						number: i,
+						x: mainTickWidth(g.size) * CGFloat(i),
+						heightContainer: g.size.height,
+						tickHeight: mainTickHeight
+					)
+
+					if zoom >= 2 {
+						tick(
+							x: mainTickWidth(g.size) / 2 + mainTickWidth(g.size) * CGFloat(i),
+							heightContainer: g.size.height,
+							tickHeight: subTickHeight)
+
+					}
+
+					if zoom >= 3 {
+						tick(
+							x: mainTickWidth(g.size) / 4 + mainTickWidth(g.size) * CGFloat(i),
+							heightContainer: g.size.height,
+							tickHeight: subTickHeight)
+
+						tick(
+							x: mainTickWidth(g.size) * 3 / 4 + mainTickWidth(g.size) * CGFloat(i),
+							heightContainer: g.size.height,
+							tickHeight: subTickHeight)
+					}
 				}
 			}
 		}
 		.background(
 			Rectangle()
-				.fill(BackgroundStyle())
+				.fill(.background)
 		)
 	}
 	
-	private func tick(number: Int, x: CGFloat, height: CGFloat) -> some View {
+	private func mainTickWidth(_ parentSize: CGSize) -> CGFloat {
+		parentSize.width / CGFloat(numberOfSegments)
+	}
+	
+	private func tick(number: Int, x: CGFloat, heightContainer: CGFloat, tickHeight: CGFloat) -> some View {
 		ZStack {
 			Text("\(number)")
 				.font(.footnote)
 				.foregroundStyle(color)
 				.position(x: x,
-						  y: (height - tickHeight) / 2)
-			Path { path in
-				path.move(to: CGPoint(x: x, y: height))
-				path.addLine(to: CGPoint(x: x, y: height - tickHeight))
-			}
-			.stroke(color, lineWidth: 1)
+						  y: (heightContainer - tickHeight) - 10)
+
+			tick(x: x, heightContainer: heightContainer, tickHeight: tickHeight)
 		}
+	}
+	
+	private func tick(x: CGFloat, heightContainer: CGFloat, tickHeight: CGFloat) -> some View {
+		Path { path in
+			path.move(to: CGPoint(x: x, y: heightContainer))
+			path.addLine(to: CGPoint(x: x, y: heightContainer - tickHeight))
+		}
+		.stroke(color, lineWidth: 1)
 	}
 }
 
-#Preview("Ruler") {
-	Ruler(numberOfSegments: 10,
-		  color: .green)
+#Preview("Zoom 1") {
+	Ruler(numberOfSegments: 10, zoom: 1)
+}
+
+#Preview("Zoom 4") {
+	Ruler(numberOfSegments: 10, zoom: 4)
 }
