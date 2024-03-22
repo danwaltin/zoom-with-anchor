@@ -26,20 +26,14 @@ struct ContentView: View {
 		
 		VSplitView {
 			GeometryReader{ g in
-				HomeMadeScroller(settings: settings, scrollState: scrollStateHomeMade)
-					.frame(width: g.size.width, height: g.size.height)
-			}
-			GeometryReader{ g in
 				BuiltInScroller(settings: settings, scrollState: scrollStateBuiltIn)
 					.frame(width: g.size.width, height: g.size.height)
 			}
 		}
 		.inspector(isPresented: $showSettings) {
 			Inspector(settings: settings, 
-					  scrollStateHomeMade: scrollStateHomeMade,
 					  scrollStateBuiltIn: scrollStateBuiltIn) {
 				settings.resetToDefault()
-				scrollStateHomeMade.resetToDefault()
 				scrollStateBuiltIn.resetToDefault()
 			}
 		}

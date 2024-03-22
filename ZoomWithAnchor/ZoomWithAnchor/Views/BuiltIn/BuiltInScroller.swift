@@ -7,9 +7,21 @@
 
 import SwiftUI
 
+fileprivate let unzoomedContentWidth: CGFloat = 250
+fileprivate let contentHeight: CGFloat = 50
+
+fileprivate let viewPortWidth: CGFloat = 200
+fileprivate let viewPortHeight: CGFloat = 100
+
 struct BuiltInScroller: View {
 	let settings: Settings
 	@Bindable var scrollState: ScrollState
+	
+	@State var contentWidth = unzoomedContentWidth
+	@State var anchorViewLeftPosition: CGFloat = 0
+	
+	@State var anchorViewPortOffset: CGFloat = 0
+	@State var anchorContentOffset: CGFloat = 0
 	
 	var body: some View {
 		VStack {
@@ -18,82 +30,72 @@ struct BuiltInScroller: View {
 				settings: settings)
 			.frame(width: 200)
 			
+			
 			ScrollViewReader { reader in
+				Button("Scroll to zoom anchor") {
+					let relativeAnchorPosition = anchorViewPortOffset / viewPortWidth
+					reader.scrollTo("qwerty123", anchor: .init(x: relativeAnchorPosition, y: 0.5))
+				}
 				ZStack {
 					ScrollView(.horizontal) {
 						ZStack {
 							HStack(spacing: 0) {
 								Rectangle()
-									.frame(width: max(0, scrollState.scrollOffset))
+									.frame(width: max(0, anchorViewLeftPosition))
 									.foregroundStyle(.gray)
 								
 								Rectangle()
-									.frame(width: settings.viewPortVisibleWidth)
+									.frame(width: viewPortWidth)
 									.foregroundStyle(.green)
 									.id("qwerty123")
 								
-								Rectangle()
-									.frame(width: max(0, zoomedWidth - settings.viewPortVisibleWidth - scrollState.scrollOffset))
-									.foregroundStyle(.gray)
+								Spacer()
+//								Rectangle()
+//									.frame(width: max(0, contentWidth - viewPortWidth - anchorViewLeftPosition))
+//									.foregroundStyle(.gray)
 							}
-							
+							.opacity(0.1)
+
 							Ruler(
 								numberOfSegments: 10,
 								color: .green)
-							.frame(width: zoomedWidth, height: settings.contentHeight)
+							.frame(width: contentWidth, height: contentHeight)
 							.background(
 								scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
 							)
 							.onPreferenceChange(ScrollViewHorizontalOffsetKey.self) {
 								scrollState.scrollOffset = $0
 							}
-							
-							
 						}
 					}
 					.scrollClipDisabled(true)
-					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
+					.frame(width: viewPortWidth, height: viewPortHeight)
 					.border(.gray)
 					.coordinateSpace(name: "scrollCoordinateSpace")
-					.onChange(of: scrollState.zoom) { old, new in
-						print("""
-	  old zoom    : \(old)
-	  new zoom    : \(new)
-	  zoomed width: \(zoomedWidth)
-	  """)
-						reader.scrollTo("qwerty123", anchor: .init(x: scrollState.relativeAnchorPositionInContent, y: 0.5))
+					.onChange(of: scrollState.zoom) { oldZoom, newZoom in
+						contentWidth = newZoom * unzoomedContentWidth
+						anchorViewLeftPosition = newZoom * anchorContentOffset
 					}
 					
 					Anchor(
-						height: settings.viewPortHeight,
-						offsetX: $scrollState.anchorPositionInViewPort)
-					.frame(width: settings.viewPortVisibleWidth, height: settings.viewPortHeight)
-					.border(.red)
+						height: viewPortHeight,
+						offsetX: $anchorViewPortOffset)
+					.frame(width: viewPortWidth, height: viewPortHeight)
 				}
 			}
 		}
-		.onChange(of: scrollState.anchorPositionInViewPort) {
+		.onChange(of: anchorViewPortOffset) {
 			updateAnchorPosition()
 		}
 		.onChange(of: scrollState.scrollOffset) {
 			updateAnchorPosition()
 		}
-		
-	}
-	
-	private var zoomedWidth: CGFloat {
-		settings.contentUnzoomedWidth * scrollState.zoom
 	}
 	
 	private func updateAnchorPosition() {
-		scrollState.relativeAnchorPositionInViewPort = scrollState.anchorPositionInViewPort / settings.viewPortVisibleWidth
-		scrollState.relativeAnchorPositionInContent = calculateRelativeAnchorPositionInContent()
+		anchorViewLeftPosition = scrollState.scrollOffset
+		anchorContentOffset = scrollState.scrollOffset + anchorViewPortOffset
 	}
-	
-	private func calculateRelativeAnchorPositionInContent() -> CGFloat{
-		(scrollState.scrollOffset + scrollState.anchorPositionInViewPort) / zoomedWidth
-	}
-	
 }
 
 #Preview {
