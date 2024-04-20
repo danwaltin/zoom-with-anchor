@@ -25,6 +25,8 @@ struct ContentView: View {
 	
 	@State var scrollViewPosition: CGPoint = .zero
 
+	@State var clipScrollContent = true
+	
 	var body: some View {
 		VStack {
 			Zoomer(
@@ -32,6 +34,7 @@ struct ContentView: View {
 				isLiveZooming: $isLiveZooming)
 			.frame(width: viewPortWidth)
 			
+			Toggle("Show entire content", isOn: $clipScrollContent)
 			
 			ZStack {
 				ScrollViewReader { scrollProxy in
@@ -49,6 +52,7 @@ struct ContentView: View {
 								}
 							}
 							Ruler(numberOfSegments: 10, zoom: zoom)
+								.gesture(pinchToZoom)
 								.frame(width: contentWidth, height: contentHeight)
 								.offset(x: -contentOffset)
 						}
@@ -63,7 +67,7 @@ struct ContentView: View {
 						}
 					}
 					.coordinateSpace(name: "scrollCoordinateSpace")
-					.scrollClipDisabled(true)
+					.scrollClipDisabled(clipScrollContent)
 					.frame(width: viewPortWidth, height: viewPortHeight)
 					.border(.gray)
 					.onChange(of: zoom) { oldZoom, newZoom in
@@ -72,7 +76,7 @@ struct ContentView: View {
 							let offset = (newZoom / oldZoom) * (contentOffset + scrollViewPosition.x + anchorViewPortOffset) - (scrollViewPosition.x + anchorViewPortOffset)
 							contentOffset = offset
 						}
-						
+												
 						let offset = (newZoom / oldZoom) * (scrollViewPosition.x + anchorViewPortOffset) - anchorViewPortOffset
 						anchorPaddingWidth = max(0, offset)
 					}
@@ -95,6 +99,32 @@ struct ContentView: View {
 			}
 		}
 	}
+	
+	@State var pinchStart: Double = 0
+	
+	var pinchToZoom: some Gesture {
+		MagnificationGesture()
+			.onChanged { amount in
+				if pinchStart == 0 { // detect when we start a new pinch gesture
+					pinchStart = zoom
+					isLiveZooming = true
+				}
+				
+				if amount >= 1 {
+					// increasing the zoom value
+					zoom = amount - 1 + pinchStart
+				} else {
+					// decreasing the zoom value
+					// here we shall go from pinchStart, which can be > 1, to zero
+					zoom = pinchStart * amount
+				}
+			}
+			.onEnded { amount in
+				pinchStart = 0
+				isLiveZooming = false
+			}
+	}
+
 }
 
 #Preview {
