@@ -16,7 +16,8 @@ struct Zoomer: View {
 	private let zoomStep: Double = 0.5
 	
 	@Binding var zoom: Double
-	
+	@Binding var isLiveZooming: Bool
+
 	var body: some View {
 		HStack {
 			Button(action: {zoom -= zoomStep}) {
@@ -32,7 +33,9 @@ struct Zoomer: View {
 				label: {EmptyView()},
 				minimumValueLabel: {Text(minZoom, format: .number.precision(.fractionLength(1)))},
 				maximumValueLabel: {Text(maxZoom, format: .number.precision(.fractionLength(1)))},
-				onEditingChanged: {_ in}
+				onEditingChanged: {
+					isLiveZooming = $0
+				}
 			)
 			.controlSize(.mini)
 			
@@ -53,5 +56,5 @@ struct Zoomer: View {
 	}
 }
 #Preview {
-	Zoomer(zoom: .constant(1))
+	Zoomer(zoom: .constant(1), isLiveZooming: .constant(false))
 }

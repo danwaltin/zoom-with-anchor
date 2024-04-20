@@ -15,18 +15,21 @@ let viewPortHeight: CGFloat = 100
 
 struct ContentView: View {
 	@State var zoom: Double = Zoomer.noZoom
-	
+	@State var isLiveZooming = false
+
 	@State var contentWidth = unzoomedContentWidth
 	@State var anchorViewPortOffset: CGFloat = 0
 
 	@State var anchorPaddingWidth: CGFloat = 0
+	@State var contentOffset: CGFloat = 0
 	
 	@State var scrollViewPosition: CGPoint = .zero
 
 	var body: some View {
 		VStack {
 			Zoomer(
-				zoom: $zoom)
+				zoom: $zoom,
+				isLiveZooming: $isLiveZooming)
 			.frame(width: viewPortWidth)
 			
 			
@@ -37,7 +40,7 @@ struct ContentView: View {
 							GeometryReader { g in
 								HStack(spacing: 0) {
 									Rectangle()
-										.frame(width: anchorPaddingWidth, height: 100)
+										.frame(width: max(0, anchorPaddingWidth), height: 100)
 										.foregroundStyle(.yellow)
 									Rectangle()
 										.id("scrollAnchor")
@@ -47,6 +50,7 @@ struct ContentView: View {
 							}
 							Ruler(numberOfSegments: 10, zoom: zoom)
 								.frame(width: contentWidth, height: contentHeight)
+								.offset(x: -contentOffset)
 						}
 						.background(
 							scrollOffsetReader(coordinateSpace: "scrollCoordinateSpace")
@@ -64,11 +68,24 @@ struct ContentView: View {
 					.border(.gray)
 					.onChange(of: zoom) { oldZoom, newZoom in
 						contentWidth = newZoom * unzoomedContentWidth
+						if isLiveZooming {
+							let offset = (newZoom / oldZoom) * (contentOffset + scrollViewPosition.x + anchorViewPortOffset) - (scrollViewPosition.x + anchorViewPortOffset)
+							contentOffset = offset
+						}
+						
 						let offset = (newZoom / oldZoom) * (scrollViewPosition.x + anchorViewPortOffset) - anchorViewPortOffset
- 						anchorPaddingWidth = max(0, offset)
+						anchorPaddingWidth = max(0, offset)
+					}
+					.onChange(of: isLiveZooming) {
+						if !isLiveZooming {
+							anchorPaddingWidth += contentOffset
+						}
+						contentOffset = 0
 					}
 					.onChange(of: anchorPaddingWidth) {
-						scrollProxy.scrollTo("scrollAnchor", anchor: .leading)
+						if !isLiveZooming {
+							scrollProxy.scrollTo("scrollAnchor", anchor: .leading)
+						}
 					}
 				}
 				Anchor(
