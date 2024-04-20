@@ -65,29 +65,11 @@ struct ContentView: View {
 					.onChange(of: zoom) { oldZoom, newZoom in
 						contentWidth = newZoom * unzoomedContentWidth
 						let offset = (newZoom / oldZoom) * (scrollViewPosition.x + anchorViewPortOffset) - anchorViewPortOffset
-						print("""
-							scroll offset: \(scrollViewPosition.x)
-							zoom: \(zoom)
-							new offset: \(offset)
-							contentWidth: \(contentWidth)
-						""")
-						anchorPaddingWidth = offset
-//						Task {
-//							scrollProxy.scrollTo("scrollAnchor")
-//						}
+ 						anchorPaddingWidth = max(0, offset)
 					}
 					.onChange(of: anchorPaddingWidth) {
 						scrollProxy.scrollTo("scrollAnchor", anchor: .leading)
 					}
-					Button("X") {
-						scrollProxy.scrollTo("scrollAnchor", anchor: .leading)
-						print("""
-							scroll offset: \(scrollViewPosition.x)
-							zoom: \(zoom)
-							contentWidth: \(contentWidth)
-						""")
-					}
-
 				}
 				Anchor(
 					height: viewPortHeight,
@@ -96,16 +78,6 @@ struct ContentView: View {
 			}
 		}
 	}
-}
-
-struct CustomScrollTargetBehavior: ScrollTargetBehavior {
-	func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
-		print("*** update target")
-	}
-}
-
-extension ScrollTargetBehavior where Self == CustomScrollTargetBehavior {
-	static var custom: CustomScrollTargetBehavior { .init() }
 }
 
 #Preview {
